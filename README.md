@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# Lucia Castro's Portfolio Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+This project is a portfolio website for Lucia Castro, showcasing her artistic work. The website is a single-page application (SPA) designed to display Lucia's gallery, bio, blog, shop, and contact information, along with social media links.
 
-## Available Scripts
+## Features
+- **Gallery**: A collection of Lucia's artworks, categorized into Illustrations, Products & Services, Clients, and Press.
+- **Bio**: Detailed biography and CV of Lucia, including her statements and pictures.
+- **Blog**: A minimalist section where Lucia shares her thoughts and experiences.
+- **Shop**: An area where visitors can browse and purchase Lucia's artwork.
+- **Contact**: Simple contact information for Lucia.
+- **Social Media Links**: Quick access to Lucia's social media profiles.
 
-In the project directory, you can run:
+## Technology Stack
+- **Front-End**: React.js
+- **State Management**: React's local state management, planned integration with Redux for global states.
+- **Routing**: React Router for SPA navigation.
+- **Back-End**: (To be developed) Express.js with a PostgreSQL database.
+- **Deployment**: Deployment to be done with Firebase
 
-### `npm start`
+## Project Structure
+- `src/`
+  - `App.js`: The root component that includes main layout and routing logic.
+  - `components/`: Individual components for each website section (Gallery, Bio, Blog, etc.).
+  - `index.js`: Entry point of the application, rendering the React app into the DOM.
+  - `assets/`: Static assets like images and stylesheets.
+- `public/`
+  - `index.html`: The HTML template.
+  - `manifest.json`: Web app manifest with metadata.
+- `README.md`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Setup and Installation
+- Clone the repository: `git clone https://github.com/cuervo-blanco/LuciaCastroArtPortfolio.git`
+- Navigate to the project directory: `cd ~/lucia-castro`
+- Install dependencies: `npm install`
+- Start the development server: `npm start`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+- Lucía Castro ©
