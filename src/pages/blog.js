@@ -18,7 +18,8 @@ class Blog extends React.Component {
 
 export async function getStaticProps() {
   // Fetch blog posts at build time
-  const res = await fetch('https://api.example.com/posts');
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/blog`);
   const posts = await res.json();
 
   return {

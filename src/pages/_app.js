@@ -1,11 +1,11 @@
 import '../styles/globals.scss';
-import Menu from './pages/Menu';
+import Menu from '../components/Menu';
 
 function App({ Component, pageProps }) {
   return (
 	<>		
 	  <Menu />
-	  <Component {...pageprops} />
+	  <Component {...pageProps} />
 	</>
   );
 }

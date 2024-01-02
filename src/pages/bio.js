@@ -10,11 +10,12 @@ const Bio = () => {
 
 export async function getStaticProps() {
   // Fetch blog posts at build time
-  const res = await fetch('https://api.example.com/posts');
-  const posts = await res.json();
+const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/bio`);
+  const bio = await res.json();
 
   return {
-    props: { posts }, // Will be passed to the page component as props
+    props: { bio }, // Will be passed to the page component as props
     revalidate: 10 // ISR: Regenerate the page every 10 seconds if needed
   };
 }
