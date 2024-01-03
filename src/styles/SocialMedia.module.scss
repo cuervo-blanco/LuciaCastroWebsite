@@ -1,0 +1,16 @@
+@import 'variables';
+
+#socialMediaContainer{
+	color: $secondary-color-default;
+	font-size: calc($space-xs + 4px);
+
+	.brandIcon{
+		margin-left: $space-2xs;
+		margin-right: $space-2xs;
+
+		&:hover{
+			cursor: pointer;
+		}
+	}
+
+}

@@ -1,31 +1,38 @@
 import React from 'react';
 import SocialMedia from './SocialMedia';
-import '../styles/Menu.module.scss';
+import styles from '../styles/Menu.module.scss';
 import Link from 'next/link'
 
 const Menu = () => {
 	return (
-		<div id="menu-container">
-			<nav>
-			<Link href="/">
-				<img src="" alt="Logo"/>
-			</Link>	
-			<Link href="/gallery">
-				gallery
-			</Link>
-			<Link href="/bio">
-				bio
-			</Link>
-			<Link href="/contact">
-				contact
-			</Link>	
-			<Link href="/blog">
-				blog			
-			</Link>
-			<Link href="/shop">
-				shop
-			</Link>
-			<SocialMedia />
+		<div id={styles.menuContainer}>
+			<nav id={styles.navbar}> 
+				{/* Left and Upper Side*/}
+				<div id={styles.leftSide}>
+					<Link href="/" className={`${styles.menuLink} ${styles.logo}`}>
+						<img src="" alt="Logo"/>
+					</Link>	
+				</div>
+				{/* Right and Lower Side*/}
+				<div id={styles.rightSide}>
+					<Link className={styles.menuLink}href="/gallery" >
+						<span >gallery</span>
+					</Link>
+					<Link className={styles.menuLink}href="/bio" >
+						<span >bio</span>
+					</Link>
+					<Link className={styles.menuLink}href="/contact" >
+						<span >contact</span>
+					</Link>	
+					<Link className={styles.menuLink}href="/blog"  >
+						<span >blog</span>			
+					</Link>
+					<Link className={styles.menuLink}href="/shop" >
+						<span >shop</span>
+					</Link>
+					{/* Social Media Icons */}
+					<SocialMedia />
+				</div>
 			</nav>
 
 		</div>

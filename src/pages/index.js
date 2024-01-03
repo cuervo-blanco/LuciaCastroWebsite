@@ -1,13 +1,13 @@
 import React from 'react';
 import '../styles/index.module.scss' 
 
-const Homepage = () => {
+const index = () => {
 	return (
-		<div id="homepage-container">
+		<div id="index-container">
 		
 		</div>
 	)};
 
 
-export default Homepage;
+export default index;
 

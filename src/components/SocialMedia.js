@@ -1,10 +1,20 @@
 import React from 'react';
-import '../styles/SocialMedia.module.scss' 
+import styles from '../styles/SocialMedia.module.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInstagram, faLinkedin, faBehance } from '@fortawesome/free-brands-svg-icons'
+
 
 const SocialMedia = () => {
-	return (
-		<div id="social-media-container">
 
+	function sendToPage(site) {
+		window.location.href = site;
+ }
+
+	return (
+		<div id={styles.socialMediaContainer}>
+			<FontAwesomeIcon icon={ faInstagram } className={styles.brandIcon} onClick={() => sendToPage('https://www.instagram.com/lucia.ic/')}/>
+			<FontAwesomeIcon icon={ faLinkedin } className={styles.brandIcon} onClick={() => sendToPage('https://www.linkedin.com/in/lucia-castro-/')}/>
+			<FontAwesomeIcon icon={ faBehance } className={styles.brandIcon} onClick={() => sendToPage('https://www.behance.net/LuciaCastro')}/>
 		</div>
 	)};
 

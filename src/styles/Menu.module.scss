@@ -1,0 +1,53 @@
+@import 'variables';
+
+#menuContainer {
+	position: fixed;
+	//border: 2px solid black;
+	background-color: transparent;
+	color: black;
+	width: 100%;
+	height: $space-l;
+	font-family: $font-secondary-default;
+
+	#navbar{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		margin: 0px;
+
+		#leftSide{
+			display: flex;
+			margin: 0;
+			margin-left: $space-l;
+
+			.menuLink{
+			color: $secondary-color-default; 
+			text-decoration: none;
+		
+			}
+
+		}
+		#rightSide{
+			display: flex;
+			margin: 0;
+			margin-right: $space-l;
+			align-items: center;
+
+		.menuLink{
+			color: $secondary-color-default; 
+			text-decoration: none;
+		
+			margin-left: $space-m;
+			margin-right: $space-m;
+		
+			}
+		}
+
+	
+
+	}
+
+	
+}
