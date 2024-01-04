@@ -9,6 +9,7 @@ class Shop extends React.Component {
 	render(){
 		return(
 			<div id="shop-container">
+			<h1>shop</h1>
 			</div>
 		)
 	}

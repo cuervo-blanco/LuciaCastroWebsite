@@ -5,7 +5,7 @@ import Button from '../components/Button'
 const Contact = () => {
 	return (
 		<div id="contact-container">
-
+			<h1>contact</h1>
 		</div>
 	)};
 

@@ -1,11 +1,17 @@
+// Color Palette:
 $primary-color-default: #FFFFFF;
+
 $secondary-color-default: #224E5B;
+$secondary-color-light: #bbd6db;
+
 $tertiary-color-default: #A40E05;
+
+// Font Families:
 $font-primary-default: serif;
 $font-secondary-default: sans-serif;
 
 
-// Resolution Sizes 
+// Resolution Sizes (using a common denominator of 8)
 $display-2xs: 320px;
 $display-xs: 376px;
 $display-s: 424px;
@@ -15,13 +21,13 @@ $display-xl: 1440px;
 $display-2xl: 2560px;
 $display-3xl: 4096px;
 
-//Space Sizes
-$space-2xs: 8px;
-$space-xs: 16px;
-$space-s: 32px;
-$space-m: 64px;
-$space-l: 128px;
-$space-xl: 256px;
-$space-2xl: 512px;
-$space-3xl: 1024px;
+//Space Sizes (starting at 8 and doubling up)
+$size-2xs: 8px;
+$size-xs: 16px;
+$size-s: 32px;
+$size-m: 64px;
+$size-l: 128px;
+$size-xl: 256px;
+$size-2xl: 512px;
+$size-3xl: 1024px;
 

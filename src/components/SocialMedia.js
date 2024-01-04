@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInstagram, faLinkedin, faBehance } from '@fortawesome/free-brands-svg-icons'
 
 
-const SocialMedia = () => {
+const SocialMedia = (props) => {
 
 	function sendToPage(site) {
 		window.location.href = site;
@@ -12,9 +12,9 @@ const SocialMedia = () => {
 
 	return (
 		<div id={styles.socialMediaContainer}>
-			<FontAwesomeIcon icon={ faInstagram } className={styles.brandIcon} onClick={() => sendToPage('https://www.instagram.com/lucia.ic/')}/>
-			<FontAwesomeIcon icon={ faLinkedin } className={styles.brandIcon} onClick={() => sendToPage('https://www.linkedin.com/in/lucia-castro-/')}/>
-			<FontAwesomeIcon icon={ faBehance } className={styles.brandIcon} onClick={() => sendToPage('https://www.behance.net/LuciaCastro')}/>
+			<FontAwesomeIcon icon={ faInstagram } className={`${styles.brandIcon} ${props.stylesProp}`} onClick={() => sendToPage('https://www.instagram.com/lucia.ic/')}/>
+			<FontAwesomeIcon icon={ faLinkedin } className={`${styles.brandIcon} ${props.stylesProp}`} onClick={() => sendToPage('https://www.linkedin.com/in/lucia-castro-/')}/>
+			<FontAwesomeIcon icon={ faBehance } className={`${styles.brandIcon} ${props.stylesProp}`} onClick={() => sendToPage('https://www.behance.net/LuciaCastro')}/>
 		</div>
 	)};
 

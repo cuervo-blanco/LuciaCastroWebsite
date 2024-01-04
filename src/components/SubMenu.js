@@ -1,20 +1,20 @@
 import React from 'react';
-import '../styles/SubMenu.module.scss' 
+import styles from '../styles/SubMenu.module.scss' 
 
-class SubMenu extends Component {
-	constructor(props) {
-		super(props);
-		state = {
-		};
-	}
+function SubMenu(props) {
+	const direction = props.direction === 'horizontal' ? [{flexDirection: 'row'}, {justifyContent: 'center'}] : [{flexDirection: 'column'}, {justifyContent: 'left'}];
 
-render () {
+
+const subMenuOptions = props.options.map((option, index) => (
+	<li key={index} style={direction[1]} onClick={() => props.onChangeOption(option)}>{option}</li>
+));
 	return(
-		<div id="sub-menu-container">
-
+		<div id={styles.subMenuContainer}>
+			<menu style={direction[0]}>
+				{subMenuOptions}	
+			</menu>	
 		</div>
 	)
-}
 
 };
 

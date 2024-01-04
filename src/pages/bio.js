@@ -4,7 +4,7 @@ import '../styles/Bio.module.scss'
 const Bio = () => {
 	return (
 		<div id="bio-container">
-
+			<h1>bio</h1>
 		</div>
 	)};
 

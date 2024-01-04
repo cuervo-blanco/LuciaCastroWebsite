@@ -1,14 +1,19 @@
 import '../styles/globals.scss';
+import { useRouter } from 'next/router';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import Menu from '../components/Menu';
 
 function App({ Component, pageProps }) {
-  return (
-	<>	
-	  <Menu />
+	const router = useRouter();
 
-	  <div className="app-background">
-	  <Component {...pageProps} />
-	  </div>
+  return (
+	< >	
+	<Menu/>
+	  <SwitchTransition mode="out-in">
+		 <CSSTransition key={router.pathname} timeout={300} classNames="page" >
+			 <Component {...pageProps} />
+		  </CSSTransition>
+	  </SwitchTransition>
 	</>
   );
 }

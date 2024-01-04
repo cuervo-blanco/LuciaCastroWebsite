@@ -1,0 +1,28 @@
+@import 'variables';
+
+
+#subMenuContainer{
+
+	menu {
+		width: auto;
+		height: auto;
+		list-style: none;
+		display: flex;
+		font-family: $font-secondary-default;
+		color: $secondary-color-default;	
+		font-size: calc($size-xs - 4px);
+
+		li {
+		width: calc($size-m + 80px);
+		height: $size-m;
+		display: flex;
+		align-items: center;
+
+		&:hover{
+		font-weight: bold;
+		cursor: pointer;
+		}	
+		}
+	}
+
+}

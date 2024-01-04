@@ -1,10 +1,28 @@
 @import 'variables';
 
+
+
 body, html {
 	margin: 0;
 	padding: 0;
-	background-color: $primary-color-default;
 	height: 100%;
-	width: 100% ;
+	width: 100%;
+	transition: background 3s ease;
+	background-color: none;
 
+}
+
+.page-enter {
+  opacity: 0;
+}
+.page-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in;
 }

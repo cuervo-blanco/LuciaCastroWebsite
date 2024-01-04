@@ -10,6 +10,7 @@ class Blog extends React.Component {
 	render (){
 		return (
 			<div id='blog-container'> 
+				<h1>blog</h1>
 			</div>
 		)
 	}

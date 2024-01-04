@@ -1,11 +1,26 @@
 import React, { useState }  from 'react';
-import '../styles/Gallery.module.scss' 
-import Image from '../components/Image'
+import styles from '../styles/Gallery.module.scss'; 
+import SubMenu from '../components/SubMenu';
+import ContentLoader from '../components/ContentLoader';
+
+const firstMenuOptions = ['ILLUSTRATIONS', 'PRODUCTS & SERVICES', 'CLIENTS', 'PRESS'];
+const secondMenuOptions = ['illustrations', 'posters', '2d animation & motion graphics', 'character design'];
 
 const Gallery = (props) => {
 
+	const [currentOption, setCurrentOption] = useState('ILLUSTRATIONS');
+
+	const handleOptionChange = (option) => {
+		setCurrentOption(option);
+	}
+
+	console.log(currentOption);
+
 	return(
-		<div id="gallery-container">
+		<div id={styles.galleryContainer}>
+		<h1>gallery</h1>
+		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" />
+		<ContentLoader toLoad={currentOption} options={secondMenuOptions} />
 		</div>
 	)
 };

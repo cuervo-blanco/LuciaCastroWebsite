@@ -1,3 +1,35 @@
-#index-container {
-	background-color: blue;
+@import 'variables';
+
+#indexContainer {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	background: linear-gradient(to bottom, #1f273c, $secondary-color-default) ;
+
+	#welcomeMessage{
+		width: calc($size-l + $size-xl);
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 37.5%;
+		left: 25%;
+
+		h1 {
+			margin: 0 0 $size-m 0;
+			padding: 0;
+			font-family: $font-primary-default;
+			font-size: $size-l;
+			text-align: right;
+			color: $secondary-color-light;
+		}
+		p {
+			color: $secondary-color-light;
+			font-family: $font-secondary-default;
+			text-align: right;
+			line-height: 1.6;
+		}
+
+
+	}
 }
