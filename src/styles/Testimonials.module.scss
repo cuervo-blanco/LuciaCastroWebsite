@@ -1,0 +1,32 @@
+@import 'variables';
+
+#testimonialsContainer{
+
+	display: flex;
+	flex-direction: row;
+
+
+	#quote{
+		font-family: $font-secondary-default;
+		color: $secondary-color-default;
+
+		blockquote{
+		margin: $size-m;
+		text-align: justify;
+		}
+
+		p{
+		font-family: $font-primary-default;
+		text-align: right;
+		margin: $size-m;
+		font-size: $size-s;
+		}
+	}
+
+	button{
+		border: none;
+		cursor: pointer;
+		font-size: $size-m;
+		color: $secondary-color-default;
+	}
+}

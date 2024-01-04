@@ -1,9 +1,10 @@
 import React from 'react';
+import styles from '../styles/Press.module.scss';
 
 function Press (props) {
 
 	return (
-		<div></div>
+		<div id={styles.pressContainer}></div>
 	)
 }
 

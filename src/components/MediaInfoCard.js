@@ -1,9 +1,13 @@
 import React from 'react';
-import '../styles/MediaInfoCard.module.scss' 
+import styles from '../styles/MediaInfoCard.module.scss';
+
 
 const MediaInfoCard = () => {
 	return (
-		<div id="media-info-card-container">
+		<div id={styles.mediaInfoCardContainer}>
+		<img alt="" src=""/>
+		<a href="">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+
 
 		</div>
 	)};

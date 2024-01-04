@@ -1,0 +1,35 @@
+@import 'variables';
+
+
+#mediaInfoCardContainer{
+		width: 320px;
+		height: $size-xl;
+		border: 1px solid $secondary-color-default;
+		margin: $size-2xs;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-family: $font-secondary-default;
+
+		&:hover{
+			cursor: pointer;
+		}
+
+
+	
+		img{
+			border-bottom: 1px solid black;
+			width: 100%;
+			height: 70%;
+		}
+
+		a {
+			width: 100%;
+			text-decoration: none;
+			color: $secondary-color-default;
+			text-align: center;
+			margin: $size-2xs;
+
+
+		}
+}

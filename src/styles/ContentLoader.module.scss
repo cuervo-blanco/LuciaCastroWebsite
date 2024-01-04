@@ -1,0 +1,12 @@
+@import 'variables';
+
+#contentLoaderContainer{
+	width: calc($size-3xl + $size-l);
+	height: calc($size-2xl + $size-m);
+	//border: 3px solid red;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: -$size-l;
+
+}

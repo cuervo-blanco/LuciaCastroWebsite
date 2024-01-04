@@ -19,7 +19,7 @@ const Gallery = (props) => {
 	return(
 		<div id={styles.galleryContainer}>
 		<h1>gallery</h1>
-		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" />
+		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" selected={currentOption} id="GSM"/>
 		<ContentLoader toLoad={currentOption} options={secondMenuOptions} />
 		</div>
 	)

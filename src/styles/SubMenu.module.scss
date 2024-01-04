@@ -17,11 +17,13 @@
 		height: $size-m;
 		display: flex;
 		align-items: center;
+		border-bottom: 2px solid transparent;
 
-		&:hover{
-		font-weight: bold;
-		cursor: pointer;
-		}	
+			&:hover {
+			 font-weight: bold;
+			 cursor: pointer;
+			 border-bottom: 2px solid $tertiary-color-default;
+			}
 		}
 	}
 
