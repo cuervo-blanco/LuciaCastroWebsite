@@ -8,5 +8,16 @@
 	flex-direction: row;
 	align-items: center;
 	margin-bottom: -$size-l;
-
 }
+
+	.content {
+		transition: opacity 3s ease;
+		 opacity: 0; /* Start with hidden content */
+		 display: none; /* Initially don't display the content */
+		}
+
+		.content.visible {
+		 opacity: 1;
+		 display: block; /* Display the content when it's visible */
+}
+

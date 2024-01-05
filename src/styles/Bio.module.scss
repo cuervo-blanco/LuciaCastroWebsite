@@ -1,0 +1,56 @@
+@import 'variables';
+
+
+#bioContainer{
+
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+
+
+	h1{
+	margin: 0;
+	color: $secondary-color-default;
+	font-size: $size-l;
+	}
+
+	#bioContent{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 0 $size-l;
+	color: $secondary-color-default;
+	font-family: $font-secondary-default;
+
+
+		div{
+		margin: 0 $size-m;
+		font-size: 12px;
+		}
+
+		h2{
+		font-size: $size-xs;
+
+		}
+
+		img{
+		width: auto;
+		height: auto;
+		}
+
+	
+	}
+		#CVButton{
+		width: 100%;
+		height: auto;
+		margin-left: $size-2xl - 80px;
+		margin-top: $size-xs;
+		
+		}
+
+}

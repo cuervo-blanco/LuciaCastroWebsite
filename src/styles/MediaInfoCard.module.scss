@@ -10,26 +10,34 @@
 		flex-direction: column;
 		align-items: center;
 		font-family: $font-secondary-default;
+		transition: transform 300ms ease;
 
 		&:hover{
-			cursor: pointer;
+		cursor: pointer;
+		transform: scale(1.05);
 		}
+
+		&:before{
+		content: "🖼️";
+		}
+
+
 
 
 	
 		img{
-			border-bottom: 1px solid black;
-			width: 100%;
 			height: 70%;
+			width: 0;
 		}
 
 		a {
 			width: 100%;
+			height: 30%;
 			text-decoration: none;
 			color: $secondary-color-default;
 			text-align: center;
 			margin: $size-2xs;
-
+			
 
 		}
 }

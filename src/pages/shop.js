@@ -1,18 +1,19 @@
 import React from 'react';
+import useSwipe from '../components/useSwipe';
 
 
-class Shop extends React.Component {
-	constructor(props){
-		super(props);
-	}
+const Shop = () => {
+	
 
-	render(){
+	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/', onRightSwipe: '/blog'});
+
 		return(
 			<div id="shop-container">
+			<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 			<h1>shop</h1>
 			</div>
+			</div>
 		)
-	}
 }
 
 export async function getStaticProps() {

@@ -28,7 +28,7 @@ const ContentLoader = (props) => {
                     {currentOption === 'illustrations' && <MediaContentLoader rows="1" columns="3" />}
                     {currentOption === 'posters' && <ImageGallery type="poster" rows="2" columns="5"/>}
                     {currentOption === '2d animation & motion graphics' && <MediaContentLoader rows="2" columns="3" />}
-					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="3" />}
+					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="2" />}
 			 </>
 			}
 			{props.toLoad === 'CLIENTS' && <Testimonials />}

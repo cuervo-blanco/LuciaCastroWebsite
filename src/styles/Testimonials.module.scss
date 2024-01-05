@@ -11,22 +11,44 @@
 		color: $secondary-color-default;
 
 		blockquote{
-		margin: $size-m;
+		margin: 0 $size-m;
 		text-align: justify;
 		}
 
 		p{
 		font-family: $font-primary-default;
-		text-align: right;
-		margin: $size-m;
+		text-align: left; 
+		margin-left: $size-m;
 		font-size: $size-s;
 		}
 	}
 
 	button{
-		border: none;
 		cursor: pointer;
 		font-size: $size-m;
 		color: $secondary-color-default;
-	}
+		border: none;
+
+		&:active{
+			color: $tertiary-color-default;
+		}
+
+		
+		}
+
+
+		.nextButton{
+		transition: transform 300ms ease;
+			&:active{
+			transform: translateX(8px);
+			}
+		}
+
+		.previousButton{
+		transition: transform 300ms ease;
+			&:active{
+			transform: translateX(-8px);
+			}
+		}
 }
+

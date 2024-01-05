@@ -1,20 +1,21 @@
 import React from 'react';
 import MediaInfoCard from '../components/MediaInfoCard'
+import useSwipe from '../components/useSwipe';
+import styles from '../styles/Blog.module.scss'
 
 
-class Blog extends React.Component {
-	constructor(props){
-		super(props);
-	}
+const Blog = () => {
 
-	render (){
+
+	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/shop', onRightSwipe: 'contact/'});
+
 		return (
 			<div id='blog-container'> 
+			<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 				<h1>blog</h1>
 			</div>
+			</div>
 		)
-	}
-
 }
 
 export async function getStaticProps() {

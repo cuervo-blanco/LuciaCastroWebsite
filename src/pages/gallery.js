@@ -2,11 +2,15 @@ import React, { useState }  from 'react';
 import styles from '../styles/Gallery.module.scss'; 
 import SubMenu from '../components/SubMenu';
 import ContentLoader from '../components/ContentLoader';
+import useSwipe from '../components/useSwipe';
 
 const firstMenuOptions = ['ILLUSTRATIONS', 'PRODUCTS & SERVICES', 'CLIENTS', 'PRESS'];
 const secondMenuOptions = ['illustrations', 'posters', '2d animation & motion graphics', 'character design'];
 
 const Gallery = (props) => {
+
+	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/bio', onRightSwipe: '/'});
+
 
 	const [currentOption, setCurrentOption] = useState('ILLUSTRATIONS');
 
@@ -18,9 +22,11 @@ const Gallery = (props) => {
 
 	return(
 		<div id={styles.galleryContainer}>
+		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 		<h1>gallery</h1>
 		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" selected={currentOption} id="GSM"/>
 		<ContentLoader toLoad={currentOption} options={secondMenuOptions} />
+		</div>
 		</div>
 	)
 };

@@ -6,29 +6,41 @@
 		align-items: center;
 		font-size: calc($size-xs + 4px);
 		width: $size-l;
-		height: 100%;
-
-
+		height: auto;
+		
 	.brandIcon{
 		width: $size-s;
 		padding: $size-xs 2px;
+		transition: transform 50ms ease;
+
+		&:active{
+		transform: scale(0.9);
+		color: $tertiary-color-default;
+		}
+
+
+	
 		&:hover{
 			cursor: pointer;
 			padding: 12px 2px;	
-			border-bottom: 2px solid $tertiary-color-default;
-			color: $primary-color-default;
+			color: $tertiary-color-default;
 			transition: color 500ms ease;
+			transform: scale(1.2);
 		}
 	}
 	.menuDark{
 		color: $secondary-color-default;
-
 		&:hover{
 		color: $tertiary-color-default;
 		}
+
+		
 	}
 	.menuLight{
 		color: $secondary-color-light;
+		&:hover{
+		color: $tertiary-color-default;
+		}
 	}
 
 }

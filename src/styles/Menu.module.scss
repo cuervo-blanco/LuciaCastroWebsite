@@ -70,12 +70,15 @@
 			margin-right: $size-xs;
 			padding: 12px;
 			border-bottom: 2px solid transparent;
+			transition: border-bottom 1s ease, color 10ms ease;
 
 				&:hover{
+				color: $tertiary-color-default;
 				padding-bottom: 12px;
 				border-bottom: 2px solid $tertiary-color-default;
-				transition: color 500ms ease;
+				transition: color 300ms ease;
 				}
+
 
 				@media only screen and (max-width: $display-l){
 					padding: 4px;
@@ -93,13 +96,18 @@
 				&:hover{
 				color: $primary-color-default;
 				font-weight: bold;
+				transform: scale(1.1);
+				border-bottom: 2px solid $primary-color-default;
+
 				}
 		}
 		.menuDark{
 			color: $secondary-color-default;
 			transition: color 300ms ease;
 			&:hover{
-			font-weight: bold;	
+			font-weight: bold;
+			color: $tertiary-color-default;
+			transform: scale(1.1);
 			}
 		}
 	}
