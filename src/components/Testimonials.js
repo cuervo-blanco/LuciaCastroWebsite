@@ -4,8 +4,7 @@ import testimonialsArray from '../data/testimonialsArray';
 
 
 
-
-function Testimonials (props) {
+function Testimonials () {
 	
 const [currentTestimonial, changeTestimonial] = useState(0);
 
@@ -28,12 +27,12 @@ const handleChangeTestimonial = (direction) => {
 	return (
 			<div id={styles.testimonialsContainer}>
 
-			<button onClick={() => handleChangeTestimonial(- 1)}>&lt;</button>
+			<button className={styles.previousButton} onClick={() => handleChangeTestimonial(- 1)}>&lt;</button>
 			<div id={styles.quote}>
 				<blockquote>{testimonial}</blockquote>
 				<p>{client}</p>
 			</div>
-			<button onClick={() => handleChangeTestimonial(+ 1)}>&gt;</button>
+			<button className={styles.nextButton} onClick={() => handleChangeTestimonial(+ 1)}>&gt;</button>
 
 		</div>
 	)

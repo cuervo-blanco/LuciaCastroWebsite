@@ -1,10 +1,10 @@
 import React from 'react';
-import '../styles/Button.module.scss' 
+import styles from '../styles/Button.module.scss' 
 
-const Button = () => {
+const Button = (props) => {
 	return (
-		<div id="button-container">
-
+		<div id={styles.buttonContainer}>
+		<a href={props.link}>{props.text}</a>
 		</div>
 	)};
 
