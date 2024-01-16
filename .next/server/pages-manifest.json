@@ -2,10 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/bio": "pages/bio.js",
-  "/": "pages/index.js",
-  "/gallery": "pages/gallery.js",
-  "/contact": "pages/contact.js",
-  "/blog": "pages/blog.js",
-  "/shop": "pages/shop.js"
+  "/gallery": "pages/gallery.js"
 }

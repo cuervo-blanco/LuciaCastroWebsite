@@ -58,7 +58,12 @@
 
 	@media only screen and (max-width: $display-m){
 			margin-right: 0;
-		}
+		}	.inactive{
+			display: none;
+			}
+			.active{
+			display: flex;
+			}
 		.menuLink{
 			width: $size-m;
 			display: flex;

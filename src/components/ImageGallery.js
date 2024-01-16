@@ -4,6 +4,8 @@ import styles from '../styles/ImageGallery.module.scss';
 
 function ImageGallery (props) {
 
+	const imageHover = {}
+
 	const grid = [];
 	for (let r = 0; r < props.rows; r++){
 	let row = [];

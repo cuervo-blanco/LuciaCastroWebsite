@@ -20,7 +20,7 @@ const Blog = () => {
 
 export async function getStaticProps() {
   // Fetch blog posts at build time
-  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3000';
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
   const res = await fetch(`${baseUrl}/api/blog`);
   const posts = await res.json();
 

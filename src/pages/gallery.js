@@ -32,8 +32,9 @@ const Gallery = (props) => {
 };
 
 export async function getStaticProps() {
-  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/gallery`);
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
+  const res = await fetch(`${baseUrl}/api/gallery`)
+	console.log(res);
   const galleryImages = await res.json();
   return {
     props: { galleryImages }, // Will be passed to the page component as props
