@@ -8,6 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
+const { saveImageDB } = require('./databaseOps');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -18,7 +19,7 @@ const serviceAccount = require('./private/my-website-26cef-firebase-adminsdk-hwa
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'my-website-26cef.appspot.com'
+  storageBucket: process.env.STORAGE_BUCKET
 });
 
 const bucket = admin.storage().bucket();
@@ -74,29 +75,51 @@ server.get('/api/shop', (req, res) => {
 });
 
 // Upload file to Firebase Storage
-server.post('/upload', upload.single('file'), (req, res) => {
-	console.log(req.file);
-	const file = req.file;
-	if (!file) {
-		console.log('Yo');
-		return res.status(400).send('No file uploaded.');
-	}
 
-	const tempFilePath = path.join(__dirname, 'uploads', file.filename);
-	console.log('path: ', tempFilePath);
-	console.log(file.originalname);
-	const uploadToFirebase = async () => {
-		await bucket.upload(tempFilePath, {
-			destination: `uploads/${file.originalname}`,
-		});
-		fs.unlinkSync(tempFilePath); //Clean up temp file
-		res.send('File uploaded to Firebase successfully.'); 
-	};
+server.post('/upload', upload.single('file'), async (req, res) => {
+    console.log(req.file);
+    const file = req.file;
+    if (!file) {
+        return res.status(400).send('No file uploaded.');
+    }
 
-	uploadToFirebase().catch(console.error);
+    const tempFilePath = path.join(__dirname, 'uploads', file.filename);
+    
+    try {
+        const uploadedFile = await bucket.upload(tempFilePath, {
+            destination: `uploads/${file.originalname}`
+        });
+
+        const fileUrl = await uploadedFile[0].getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491' //far future
+        });
+
+        const publicUrl = fileUrl[0];
+        const dbResult = await saveImageDB(publicUrl, req.body.alt); // Assuming saveImageDB is properly defined elsewhere
+
+        // Clean up the temporary file
+        fs.unlink(tempFilePath, (err) => {
+            if (err) {
+                console.error(`Error deleting temp file: ${err.message}`);
+            }
+        });
+
+        // Send a successful response
+        res.send({ message: 'File uploaded successfully', url: publicUrl, dbResult: dbResult });
+    } catch (error) {
+        console.error(error.message);
+        // Clean up the temporary file even if there was an error
+        fs.unlink(tempFilePath, (err) => {
+            if (err) {
+                console.error(`Error deleting temp file: ${err.message}`);
+            }
+        });
+        
+        // Send an error response
+        res.status(500).send({ error: error.message });
+    }
 });
-	
-
 
 // Next.js page handling
   server.get('*', (req, res) => {
