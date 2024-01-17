@@ -2,7 +2,7 @@ require('dotenv').config();
 
 let express =  require('express');
 const next = require('next');
-const pool = require('./db');
+const { getImageList, pool } = require('./db');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
@@ -119,6 +119,18 @@ server.post('/upload', upload.single('file'), async (req, res) => {
         // Send an error response
         res.status(500).send({ error: error.message });
     }
+});
+
+server.get('/image-list', async (req, res) => {
+console.log('Received a request') ;
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 24;
+	try {
+	const result = await getImageList(page, limit);
+		res.json(result);
+	} catch (error) {
+	res.status(500).send(err.message);
+	}
 });
 
 // Next.js page handling
