@@ -2,19 +2,22 @@ require('dotenv').config();
 
 let express =  require('express');
 const next = require('next');
-const { getImageList, pool } = require('./db');
+const pool = require('./db');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB } = require('./databaseOps');
+const { saveImageDB, getImageList } = require('./databaseOps');
+const { Server } = require('socket.io');
+const http = require('http');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const multer = require('multer');
 const serviceAccount = require('./private/my-website-26cef-firebase-adminsdk-hwavs-5e47e95ea7.json');
+
 
 
 admin.initializeApp({
@@ -31,6 +34,22 @@ const bucket = admin.storage().bucket();
 
 app.prepare().then(() => {
 const server = express();
+const httpServer = http.createServer(server);
+const io = new Server(httpServer, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+	},
+});
+
+	io.on('connection', (socket) => {
+		console.log('a user connected', socket.id);
+
+		socket.on('disconnect', () => {
+			console.log('a user disconnected', socket.id);
+		});
+	});
+
 
 const upload = multer({ dest: 'uploads/' })
 	
@@ -104,6 +123,8 @@ server.post('/upload', upload.single('file'), async (req, res) => {
                 console.error(`Error deleting temp file: ${err.message}`);
             }
         });
+		console.log('Emitting image-uploaded event');
+		io.emit('image-uploaded', { message: 'New image uploaded'});
 
         // Send a successful response
         res.send({ message: 'File uploaded successfully', url: publicUrl, dbResult: dbResult });
@@ -122,7 +143,6 @@ server.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 server.get('/image-list', async (req, res) => {
-console.log('Received a request') ;
 	const page = parseInt(req.query.page) || 1;
 	const limit = parseInt(req.query.limit) || 24;
 	try {
@@ -140,7 +160,9 @@ console.log('Received a request') ;
 
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, (err) => {
+
+
+httpServer.listen(PORT, (err) => {
   if (err) throw err;
   console.log(`> Ready on http://localhost:${PORT}`);
 });

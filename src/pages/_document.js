@@ -6,7 +6,6 @@ export default function Document() {
     <Html >
       <Head >
 	  <link rel="manifest" href="/manifest.json" />
-	  <title>Lucía Castro</title>
 	  </Head>
       <body>
         <Main />
