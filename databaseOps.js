@@ -1,9 +1,9 @@
 const pool = require('./db'); // import your database pool
 
-const saveImageDB = async (publicUrl, altText) => {
+const saveImageDB = async (publicUrl, altText, originalName) => {
     try {
-        const query = 'INSERT INTO images(url, alt) VALUES($1, $2)';
-        const values = [publicUrl, altText];
+        const query = 'INSERT INTO images(url, alt, original_name) VALUES($1, $2, $3)';
+        const values = [publicUrl, altText, originalName];
         const result = await pool.query(query, values);
         return result.rows; // rows contain the query results
     } catch (err) {
@@ -33,8 +33,43 @@ async function getImageList(page, limit) {
     }
 }
 
+async function getOriginalName(imgUrl) {
+	try {
+		const result = await pool.query('SELECT original_name FROM images WHERE url = $1', [imgUrl]);
+        console.log('Original name query result: ', result.rows[0]);
+        if (result.rows.length > 0) {
+            return result.rows[0].original_name; // Return the original_name of the first row
+        } else {
+            throw new Error('No matching image found for the provided URL.');
+        }	
+	} 
+
+	catch (err) { 
+		console.error('Error getting image original name from database', err.stack);
+		throw err;
+	}
+}
+
+async function deleteImageDB(imgUrl) {
+	try {
+		const result = await pool.query('DELETE FROM images WHERE url = $1', [imgUrl]);
+		if (result.rowCount === 0) {
+            // No rows were deleted, this means the image URL was not found
+            return { success: false, message: "No image found with the provided URL." };
+        } else {
+            // Rows were deleted
+            return { success: true, message: `${result.rowCount} image(s) deleted successfully.` };
+        }
+	} catch { 
+		console.error('Error deleting image from database', err.stack);
+		throw err;
+	}
+}
+
 module.exports = {
     saveImageDB,
-	getImageList
+	getImageList,
+	getOriginalName, 
+	deleteImageDB
 };
 

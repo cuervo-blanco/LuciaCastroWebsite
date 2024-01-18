@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -54,6 +54,7 @@ const io = new Server(httpServer, {
 const upload = multer({ dest: 'uploads/' })
 	
 	server.use(cors());
+	server.use(express.json());
 	
 	pool.connect((err, client, release) => {
     if (err) {
@@ -115,7 +116,7 @@ server.post('/upload', upload.single('file'), async (req, res) => {
         });
 
         const publicUrl = fileUrl[0];
-        const dbResult = await saveImageDB(publicUrl, req.body.alt); // Assuming saveImageDB is properly defined elsewhere
+        const dbResult = await saveImageDB(publicUrl, req.body.alt, file.originalname); // Assuming saveImageDB is properly defined elsewhere
 
         // Clean up the temporary file
         fs.unlink(tempFilePath, (err) => {
@@ -141,6 +142,37 @@ server.post('/upload', upload.single('file'), async (req, res) => {
         res.status(500).send({ error: error.message });
     }
 });
+
+server.post('/delete-image', async (req, res) => {
+
+		const imgUrl = req.body.imgUrl;
+		
+		if (!imgUrl) {
+			return res.status(400).send('No image URL provided.');
+		}
+
+	try {
+
+		//query database to get original name of file from url
+		const originalName = await getOriginalName(imgUrl);
+		console.log(originalName);
+		//delete from firebase storage
+		//
+		const file = bucket.file(`uploads/${originalName}`); // The path to your file in Firebase Storage
+		await file.delete();
+		//delete from database
+		const dbResult = await deleteImageDB(imgUrl); 
+		
+		io.emit('image-deleted', { message: 'Image was deleted'});
+
+		res.send({ message: 'Image deleted successfully', dbResult });
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send({ error: error.message })
+	}
+
+} );
+
 
 server.get('/image-list', async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
