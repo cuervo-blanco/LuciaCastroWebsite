@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from '../styles/SocialMedia.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInstagram, faLinkedin, faBehance } from '@fortawesome/free-brands-svg-icons'
+import { faInstagram, faLinkedin, faBehance } from '@fortawesome/free-brands-svg-icons';
+
+	export function sendToPage(site) {
+		window.location.href = site;
+ }
 
 
 const SocialMedia = (props) => {
-
-	function sendToPage(site) {
-		window.location.href = site;
- }
 
 	return (
 		<div id={styles.socialMediaContainer}>

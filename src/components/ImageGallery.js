@@ -2,29 +2,33 @@ import React from 'react';
 import Image from './Image';
 import styles from '../styles/ImageGallery.module.scss';
 
-function ImageGallery (props) {
-
-	const imageHover = {}
+function ImageGallery ({type, rows, columns}) {
+	
+	const tempFetchData = {
+		"1-1": {src: "", alt: "", link: ""}
+	}
 
 	const grid = [];
-	for (let r = 0; r < props.rows; r++){
+	for (let r = 1; r <= rows; r++){
 	let row = [];
 
-		for (let c = 0; c < props.columns; c++){
+		for (let c = 1; c <= columns; c++){
+			const connectionId = `${r}-${c}`;
+			const imageData = tempFetchData[connectionId] || { src: "", alt: "", link:""};
 			row.push(
-				<Image key={`${r}-${c}`} type={props.type} />
+				<Image key={connectionId} connectionId={connectionId} type={type} src={imageData.src} alt={imageData.alt} link={imageData.link}/>
 			);
 		}
 	
 		grid.push(
-			<div key={r} className={styles.pictureRow}>{row}</div>
+			<div key={`row-${r}`} className={styles.pictureRow}>{row}</div>
 		);
 	}
 
 
 
 	return (
-		<div id={styles.imageGalleryContainer} >
+		<div id={styles.imageGalleryContainer}>
 			{grid}	
 		</div>
 	)

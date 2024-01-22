@@ -1,11 +1,12 @@
 import React from 'react';
-import styles from '../styles/Image.module.scss' 
+import styles from '../styles/Image.module.scss';
+import sendToPage from './SocialMedia'; 
 
-const Image = (props) => {
+const Image = ({type, src, alt, link}) => {
 
 	let size = {};
 	
-	switch (props.type) {
+	switch (type) {
 	case 'square':
 		size = {width: '176px', height: '176px'};
 		break;
@@ -17,8 +18,8 @@ const Image = (props) => {
 	}
 	
 	return (
-		<div id={styles.imageContainer} style={size}>
-			<img alt="" src=""/>
+		<div id={styles.imageContainer} style={size} onClick={() => sendToPage(link)}>
+			<img alt={alt} src={src}/>
 		</div>
 	)};
 
