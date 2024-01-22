@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateIllustrations, getIllustrations } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -97,7 +97,6 @@ server.get('/api/shop', (req, res) => {
 // Upload file to Firebase Storage
 
 server.post('/upload', upload.single('file'), async (req, res) => {
-    console.log(req.file);
     const file = req.file;
     if (!file) {
         return res.status(400).send('No file uploaded.');
@@ -124,7 +123,6 @@ server.post('/upload', upload.single('file'), async (req, res) => {
                 console.error(`Error deleting temp file: ${err.message}`);
             }
         });
-		console.log('Emitting image-uploaded event');
 		io.emit('image-uploaded', { message: 'New image uploaded'});
 
         // Send a successful response
@@ -155,7 +153,6 @@ server.post('/delete-image', async (req, res) => {
 
 		//query database to get original name of file from url
 		const originalName = await getOriginalName(imgUrl);
-		console.log(originalName);
 		//delete from firebase storage
 		//
 		const file = bucket.file(`uploads/${originalName}`); // The path to your file in Firebase Storage
@@ -172,6 +169,27 @@ server.post('/delete-image', async (req, res) => {
 	}
 
 } );
+
+server.post('/update-illustrations', async (req, res) => {
+	try {
+		const illustrations = req.body.illustrations;
+		const result = await updateIllustrations(illustrations);
+		res.status(200).json({ message: 'Illustrations updated successfully', result });
+	} catch (error){
+		console.error(error.message);
+	res.status(500).send({  error: error.message })
+	}
+});
+
+server.get('/get-illustrations', async (req, res) => {
+	
+ try {
+      const illustrations = await getIllustrations();
+      res.json(illustrations);
+    } catch (error) { 
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
 server.get('/image-list', async (req, res) => {

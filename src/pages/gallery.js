@@ -7,7 +7,7 @@ import useSwipe from '../components/useSwipe';
 const firstMenuOptions = ['ILLUSTRATIONS', 'PRODUCTS & SERVICES', 'CLIENTS', 'PRESS'];
 const secondMenuOptions = ['illustrations', 'posters', '2d animation & motion graphics', 'character design'];
 
-const Gallery = (props) => {
+const Gallery = ({ illustrations }) => {
 
 	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/bio', onRightSwipe: '/'});
 
@@ -25,7 +25,7 @@ const Gallery = (props) => {
 		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 		<h1>gallery</h1>
 		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" selected={currentOption} id="GSM"/>
-		<ContentLoader toLoad={currentOption} options={secondMenuOptions} />
+		<ContentLoader toLoad={currentOption} options={secondMenuOptions} illustrations={illustrations} />
 		</div>
 		</div>
 	)
@@ -33,11 +33,12 @@ const Gallery = (props) => {
 
 export async function getStaticProps() {
   const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
-  const res = await fetch(`${baseUrl}/api/gallery`)
-	console.log(res);
-  const galleryImages = await res.json();
+  const res = await fetch(`${baseUrl}/get-illustrations`)
+	const illustrations = await res.json();
+	console.log('These are the illustrations: ', illustrations);
+
   return {
-    props: { galleryImages }, // Will be passed to the page component as props
+    props: { illustrations }, // Will be passed to the page component as props
   };
 }
 

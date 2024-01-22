@@ -14,7 +14,7 @@ const Contact = () => {
 			<p>Let's collaborate!</p>
 			<p>Feel free to write me if you would like us to collaborate on a project, or if your have any questions. <br/><br/>I'll be happy to read from you :) </p>
 		<Button text="Send e-mail" link=""/>
-		<SocialMedia id={styles.socialMediaIcons}/>
+		<SocialMedia id={styles.socialMediaIcons} stylesProp={null}/>
 		</div>
 		</div>
 	)};

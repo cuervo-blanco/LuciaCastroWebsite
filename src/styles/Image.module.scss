@@ -1,15 +1,15 @@
 @import 'variables';
 
 #imageContainer{
-	border: 1px solid $secondary-color-default;
+	//border: 1px solid $secondary-color-default;
 	margin: $size-2xs;
 	transition: transform 300ms ease, box-shadow 300ms ease;
 	background-color: $primary-color-default;
 
 	&:hover{
 		cursor: pointer;
-		transform: scale(1.2) translateX(4px) translateY(-6px);
-		box-shadow: -10px 10px rgba($secondary-color-default, 0.7);
+		transform: scale(1.3) translateX(4px) translateY(-6px);
+		box-shadow: -10px 10px rgba($secondary-color-default, 0.9);
 		z-index: 1000;
 	
 	}
@@ -17,5 +17,6 @@
 
 	img{
 		object-fit: cover;
+		width: 100%;
 	}
 }

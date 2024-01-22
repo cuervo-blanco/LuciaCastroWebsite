@@ -6,14 +6,14 @@ import Testimonials from './Testimonials';
 import Press from './Press';
 import MediaContentLoader from './MediaContentLoader';
 
-const ContentLoader = (props) => {
+const ContentLoader = ({ options, toLoad, illustrations }) => {
 		// This sets the state for the option selected in the Second Submenu, the one inside this Component
 		const [currentOption, setCurrentOption] = useState('illustrations');
-		const [visibleContent, setVisibleContent] = useState(props.toLoad);
+		const [visibleContent, setVisibleContent] = useState(toLoad);
 
 		 useEffect(() => {
-			 setVisibleContent(props.toLoad);
-		  }, [props.toLoad]);
+			 setVisibleContent(toLoad);
+		  }, [toLoad]);
 
 		const handleOptionChange = (option) => {
 		setCurrentOption(option);
@@ -21,18 +21,18 @@ const ContentLoader = (props) => {
 
 	return (
 		<div id={styles.contentLoaderContainer}>
-		 	{props.toLoad === 'ILLUSTRATIONS' &&(<ImageGallery  type="square" rows="3" columns="5"/>)}
-			{props.toLoad === 'PRODUCTS & SERVICES' &&
+		 	{toLoad === 'ILLUSTRATIONS' &&(<ImageGallery type="square" rows="3" columns="5" illustrations={illustrations}/>)}
+			{toLoad === 'PRODUCTS & SERVICES' &&
 			<>
-                    <SubMenu options={props.options} onChangeOption={handleOptionChange} direction="vertical" selected={currentOption} id="CSM" />
+                    <SubMenu options={options} onChangeOption={handleOptionChange} direction="vertical" selected={currentOption} id="CSM" />
                     {currentOption === 'illustrations' && <MediaContentLoader rows="1" columns="3" />}
                     {currentOption === 'posters' && <ImageGallery type="poster" rows="2" columns="5"/>}
                     {currentOption === '2d animation & motion graphics' && <MediaContentLoader rows="2" columns="3" />}
 					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="2" />}
 			 </>
 			}
-			{props.toLoad === 'CLIENTS' && <Testimonials />}
-			{props.toLoad === 'PRESS' && <Press />}
+			{toLoad === 'CLIENTS' && <Testimonials />}
+			{toLoad === 'PRESS' && <Press />}
 		</div>
 	)};
 

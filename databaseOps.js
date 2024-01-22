@@ -19,7 +19,6 @@ async function getImageList(page, limit) {
 
 	try {
         const images = await pool.query('SELECT * FROM images ORDER BY upload_date DESC LIMIT $1 OFFSET $2', [limit, offset]);
-		console.log('Images: ', images.rows);
 		const count = await pool.query('SELECT COUNT(*) FROM images');
 		const data = {
 			images: images.rows,
@@ -36,7 +35,6 @@ async function getImageList(page, limit) {
 async function getOriginalName(imgUrl) {
 	try {
 		const result = await pool.query('SELECT original_name FROM images WHERE url = $1', [imgUrl]);
-        console.log('Original name query result: ', result.rows[0]);
         if (result.rows.length > 0) {
             return result.rows[0].original_name; // Return the original_name of the first row
         } else {
@@ -66,10 +64,55 @@ async function deleteImageDB(imgUrl) {
 	}
 }
 
+
+async function updateIllustrations(illustrations) {
+
+			const client = await pool.connect();		// get client from pool
+
+		try{
+
+			await client.query('BEGIN'); // start transaction
+
+			for (const illustration of illustrations) {
+
+				//Find image_id
+				const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [illustration.src]);
+				const imageId = imageRes.rows[0]?.image_id;
+
+				const insertQuery = `INSERT INTO illustrations (connection_id, src, alt, link, image_id) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id;`;
+				const values = [illustration.connection_id, illustration.src, illustration.alt, illustration.link, imageId];
+				await client.query(insertQuery, values);
+				}
+
+			await client.query('COMMIT');
+
+			} catch(err){
+				await client.query('ROLLBACK');
+				console.error('Transaction ROLLBACK due to error', err);
+				throw err;
+			} finally {
+				client.release();
+			}
+}
+
+async function getIllustrations() {
+		try{
+			const result = await pool.query('SELECT connection_id, src, alt, link FROM illustrations ORDER BY connection_id');
+			return result.rows;
+		} catch(err) {
+			console.error('Error getting illustrations', err.stack);
+			throw err;
+		}
+
+}
+
+
 module.exports = {
     saveImageDB,
 	getImageList,
 	getOriginalName, 
-	deleteImageDB
+	deleteImageDB,
+	updateIllustrations,
+	getIllustrations
 };
 
