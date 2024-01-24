@@ -1,8 +1,12 @@
 import React from 'react';
 import styles from '../styles/Image.module.scss';
-import sendToPage from './SocialMedia'; 
 
 const Image = ({type, src, alt, link}) => {
+
+	 function sendToPage(site) {
+		window.location.href = site;
+	}
+
 
 	let size = {};
 	

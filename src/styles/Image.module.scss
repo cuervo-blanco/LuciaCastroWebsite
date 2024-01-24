@@ -9,7 +9,7 @@
 	&:hover{
 		cursor: pointer;
 		transform: scale(1.3) translateX(4px) translateY(-6px);
-		box-shadow: -10px 10px rgba($secondary-color-default, 0.9);
+		box-shadow: -10px 10px 9px rgba($secondary-color-default, 0.6);
 		z-index: 1000;
 	
 	}
