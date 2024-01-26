@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateIllustrations, getIllustrations } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -170,22 +170,22 @@ server.post('/delete-image', async (req, res) => {
 
 } );
 
-server.post('/update-illustrations', async (req, res) => {
+server.post('/update-content', async (req, res) => {
 	try {
-		const illustrations = req.body.illustrations;
-		const result = await updateIllustrations(illustrations);
-		res.status(200).json({ message: 'Illustrations updated successfully', result });
+		const content = req.body.content;
+		const result = await updateContent(content);
+		res.status(200).json({ message: 'Content updated successfully', result });
 	} catch (error){
 		console.error(error.message);
 	res.status(500).send({  error: error.message })
 	}
 });
 
-server.get('/get-illustrations', async (req, res) => {
+server.get('/get-content', async (req, res) => {
 	
  try {
-      const illustrations = await getIllustrations();
-      res.json(illustrations);
+      const content = await getContent();
+      res.json(content);
     } catch (error) { 
       res.status(500).json({ error: 'Internal Server Error' });
     }

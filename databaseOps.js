@@ -65,7 +65,8 @@ async function deleteImageDB(imgUrl) {
 }
 
 
-async function updateIllustrations(illustrations) {
+async function updateContent(content) {
+
 
 			const client = await pool.connect();		// get client from pool
 
@@ -73,16 +74,37 @@ async function updateIllustrations(illustrations) {
 
 			await client.query('BEGIN'); // start transaction
 
-			for (const illustration of illustrations) {
+			for (const item of content) {
+					
+				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design') {
 
-				//Find image_id
-				const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [illustration.src]);
-				const imageId = imageRes.rows[0]?.image_id;
 
-				const insertQuery = `INSERT INTO illustrations (connection_id, src, alt, link, image_id) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id;`;
-				const values = [illustration.connection_id, illustration.src, illustration.alt, illustration.link, imageId];
+					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
+					const imageId = imageRes.rows[0]?.image_id;
+
+					if (item.status === 'delete') {
+						const deleteQuery = 'DELETE FROM media_info_cards WHERE connection_id = $1'
+						const deleteValues = [item.connection_id];
+						await client.query(deleteQuery, deleteValues);
+							
+					} else {
+						const mediaInfoCardInsert = `INSERT INTO media_info_cards (connection_id, src, alt, link, image_id, section_id, title, description, subtitle, published_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id, section_id = EXCLUDED.section_id, title = EXCLUDED.title, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle, published_date = EXCLUDED.published_date`;
+						const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id, item.title, item.description, item.subtitle, item.published_date];
+						await client.query(mediaInfoCardInsert, values);
+					} 
+
+				} else if (item.section_id === 'illustrations') {
+						//Find image_id
+						const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
+						const imageId = imageRes.rows[0]?.image_id;
+
+						const insertQuery = `INSERT INTO illustrations (connection_id, src, alt, link, image_id, section_id) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id, section_id = EXCLUDED.section_id;`;
+				const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id];
 				await client.query(insertQuery, values);
+					}
+
 				}
+
 
 			await client.query('COMMIT');
 
@@ -95,10 +117,13 @@ async function updateIllustrations(illustrations) {
 			}
 }
 
-async function getIllustrations() {
+async function getContent() {
 		try{
-			const result = await pool.query('SELECT connection_id, src, alt, link FROM illustrations ORDER BY connection_id');
-			return result.rows;
+			const illustrationsResult = await pool.query('SELECT connection_id, src, alt, link, section_id  FROM illustrations ORDER BY connection_id');
+			 const mediaInfoCardsResult = await pool.query('SELECT connection_id, src, alt, link, section_id, title, description, subtitle, published_date FROM media_info_cards ORDER BY published_date' );
+
+			const combinedResult = [...illustrationsResult.rows, ...mediaInfoCardsResult.rows]
+			return combinedResult;
 		} catch(err) {
 			console.error('Error getting illustrations', err.stack);
 			throw err;
@@ -112,7 +137,7 @@ module.exports = {
 	getImageList,
 	getOriginalName, 
 	deleteImageDB,
-	updateIllustrations,
-	getIllustrations
+	updateContent,
+	getContent
 };
 

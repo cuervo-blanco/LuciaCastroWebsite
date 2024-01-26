@@ -4,7 +4,6 @@ import styles from '../styles/ImageGallery.module.scss';
 
 function ImageGallery ({type, rows, columns, illustrations}) {
 
-	console.log('Illustrations inside image gallery: ', illustrations);
 
 	const grid = [];
 	for (let r = 1; r <= rows; r++){

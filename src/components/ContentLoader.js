@@ -6,7 +6,7 @@ import Testimonials from './Testimonials';
 import Press from './Press';
 import MediaContentLoader from './MediaContentLoader';
 
-const ContentLoader = ({ options, toLoad, illustrations }) => {
+const ContentLoader = ({ options, toLoad, illustrations, mic1, mic2, mic3 }) => {
 		// This sets the state for the option selected in the Second Submenu, the one inside this Component
 		const [currentOption, setCurrentOption] = useState('illustrations');
 		const [visibleContent, setVisibleContent] = useState(toLoad);
@@ -25,10 +25,10 @@ const ContentLoader = ({ options, toLoad, illustrations }) => {
 			{toLoad === 'PRODUCTS & SERVICES' &&
 			<>
                     <SubMenu options={options} onChangeOption={handleOptionChange} direction="vertical" selected={currentOption} id="CSM" />
-                    {currentOption === 'illustrations' && <MediaContentLoader rows="1" columns="3" />}
+                    {currentOption === 'illustrations' && <MediaContentLoader rows="1" columns="3" data={mic1}/>}
                     {currentOption === 'posters' && <ImageGallery type="poster" rows="2" columns="5"/>}
-                    {currentOption === '2d animation & motion graphics' && <MediaContentLoader rows="2" columns="3" />}
-					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="2" />}
+                    {currentOption === '2d animation & motion graphics' && <MediaContentLoader rows="2" columns="3" data={mic2}/>}
+					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="2" data={mic3} />}
 			 </>
 			}
 			{toLoad === 'CLIENTS' && <Testimonials />}
