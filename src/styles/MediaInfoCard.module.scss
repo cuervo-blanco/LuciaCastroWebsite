@@ -4,7 +4,10 @@
 #mediaInfoCardContainer{
 		width: 320px;
 		height: $size-xl;
-		//border: 1px solid $secondary-color-default;
+		//border-left: 2px solid $secondary-color-default;
+		border-bottom: 4px solid $secondary-color-default;
+		//border-top: 2px solid $secondary-color-default;
+		//border-right: 2px solid $secondary-color-default;
 		background-color: $primary-color-default;
 		margin: $size-2xs;
 		display: flex;
@@ -12,13 +15,17 @@
 		align-items: center;
 		font-family: $font-secondary-default;
 		transition: transform 300ms ease, box-shadow 300ms ease;
-		overflow: hidden;
+		//overflow: hidden;
+		padding: 8px;
 
 		&:hover{
 		cursor: pointer;
 		transform: scale(1.15) translateX(4px) translateY(-8px);
-		box-shadow: -10px 10px rgba($secondary-color-default, 0.7);
+		box-shadow: 4px 10px rgba($secondary-color-default, 0.7);
 		z-index: 1000;
+
+		border-bottom: solid 4px $tertiary-color-default;
+		
 
 		}
 
@@ -44,7 +51,7 @@
 
 		display: flex;
 		justify-content: center;
-		align-items: center;
+		align-items: bottom;
 
 		a {
 			width: 100%;
@@ -53,6 +60,10 @@
 			color: $secondary-color-default;
 			text-align: center;
 			margin: $size-2xs;
+
+			&:hover {
+			color: $tertiary-color-default;
+			}
 			
 
 		}

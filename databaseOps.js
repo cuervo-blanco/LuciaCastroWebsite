@@ -67,31 +67,27 @@ async function deleteImageDB(imgUrl) {
 
 async function updateContent(content) {
 
+console.log(content);
 
-			const client = await pool.connect();		// get client from pool
+	const client = await pool.connect();// get client from pool
 
 		try{
 
 			await client.query('BEGIN'); // start transaction
 
 			for (const item of content) {
-					
-				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design') {
-
-
-					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
-					const imageId = imageRes.rows[0]?.image_id;
-
-					if (item.status === 'delete') {
+					if (item.action === 'delete') {
 						const deleteQuery = 'DELETE FROM media_info_cards WHERE connection_id = $1'
 						const deleteValues = [item.connection_id];
-						await client.query(deleteQuery, deleteValues);
-							
-					} else {
+						await client.query(deleteQuery, deleteValues);		
+					}
+				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design') {
+						const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
+						const imageId = imageRes.rows[0]?.image_id;
 						const mediaInfoCardInsert = `INSERT INTO media_info_cards (connection_id, src, alt, link, image_id, section_id, title, description, subtitle, published_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id, section_id = EXCLUDED.section_id, title = EXCLUDED.title, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle, published_date = EXCLUDED.published_date`;
 						const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id, item.title, item.description, item.subtitle, item.published_date];
 						await client.query(mediaInfoCardInsert, values);
-					} 
+
 
 				} else if (item.section_id === 'illustrations') {
 						//Find image_id

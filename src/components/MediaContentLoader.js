@@ -13,7 +13,7 @@ const MediaContentLoader = ({rows, columns, type, data}) => {
 		for (let c = 0; c < columns; c++){
 			const index = r * columns + c ;
 			const card = data[index];
-			console.log('Card: ', card);
+		
 
 			if (card) {
 				row.push(
