@@ -14,7 +14,6 @@ const MediaContentLoader = ({rows, columns, type, data}) => {
 			const index = r * columns + c ;
 			const card = data[index];
 		
-
 			if (card) {
 				row.push(
 					<MediaInfoCard key={card.connection_id} type={type} alt={card.alt} src={card.src} link={card.link} title={card.title} description={card.description} subtitle={card.subtitle}/>
@@ -27,10 +26,6 @@ const MediaContentLoader = ({rows, columns, type, data}) => {
 			);
 		}
 	}
-
-
-
-
 
 	return (
 		<div id={styles.mediaContentLoaderContainer}>

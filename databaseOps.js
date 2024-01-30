@@ -79,7 +79,7 @@ console.log(content);
 					if (item.action === 'delete') {
 
 						let table = '';
-						if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design'){
+				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design' || item.section_id === 'press'){
 							table = 'media_info_cards';	
 						}
 						else if (item.section_id ===  'clients'){
@@ -91,7 +91,8 @@ console.log(content);
 							continue;
 						}
 
-				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design') {
+
+				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design' || item.section_id === 'press') {
 					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
 					const imageId = imageRes.rows[0]?.image_id;
 					const mediaInfoCardInsert = `INSERT INTO media_info_cards (connection_id, src, alt, link, image_id, section_id, title, description, subtitle, published_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id, section_id = EXCLUDED.section_id, title = EXCLUDED.title, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle, published_date = EXCLUDED.published_date`;

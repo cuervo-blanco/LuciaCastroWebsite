@@ -11,10 +11,12 @@ const Gallery = ({ illustrations,
 					psIllustrations,
 					ps2dAnimation,
 					psCharacterDesign, 
-					clientQuotes
+					clientQuotes,
+					press
 					}) => {
 
 	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/bio', onRightSwipe: '/'});
+
 
 
 	const [currentOption, setCurrentOption] = useState('ILLUSTRATIONS');
@@ -30,7 +32,7 @@ const Gallery = ({ illustrations,
 		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 		<h1>gallery</h1>
 		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" selected={currentOption} id="GSM"/>
-		<ContentLoader toLoad={currentOption} options={secondMenuOptions} illustrations={illustrations} mic1={psIllustrations} mic2={ps2dAnimation} mic3={psCharacterDesign} clients={clientQuotes}/>
+		<ContentLoader toLoad={currentOption} options={secondMenuOptions} illustrations={illustrations} mic1={psIllustrations} mic2={ps2dAnimation} mic3={psCharacterDesign} clients={clientQuotes} mic4={press}/>
 		</div>
 		</div>
 	)
@@ -47,6 +49,7 @@ export async function getStaticProps() {
 	const psIllustrations = content.filter(item => item.section_id === 'p&s: illustrations'); 
 	const ps2dAnimation = content.filter(item => item.section_id === 'p&s: 2d animation & motion graphics');
 	const psCharacterDesign = content.filter(item => item.section_id === 'p&s: character design');
+	const press = content.filter(item => item.section_id === 'press');
 	const clientQuotes = content.filter(item => item.section_id === 'clients');
 
   return {
@@ -55,7 +58,8 @@ export async function getStaticProps() {
 		psIllustrations,
 		ps2dAnimation,
 		psCharacterDesign,
-		clientQuotes
+		clientQuotes,
+		press
 	}, // Will be passed to the page component as props
   };
 }
