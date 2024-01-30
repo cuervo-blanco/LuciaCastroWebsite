@@ -6,7 +6,7 @@ import Testimonials from './Testimonials';
 import Press from './Press';
 import MediaContentLoader from './MediaContentLoader';
 
-const ContentLoader = ({ options, toLoad, illustrations, mic1, mic2, mic3 }) => {
+const ContentLoader = ({ options, toLoad, illustrations, mic1, mic2, mic3, clients }) => {
 		// This sets the state for the option selected in the Second Submenu, the one inside this Component
 		const [currentOption, setCurrentOption] = useState('illustrations');
 		const [visibleContent, setVisibleContent] = useState(toLoad);
@@ -31,7 +31,7 @@ const ContentLoader = ({ options, toLoad, illustrations, mic1, mic2, mic3 }) => 
 					{currentOption === 'character design' && <MediaContentLoader rows="2" columns="2" data={mic3} />}
 			 </>
 			}
-			{toLoad === 'CLIENTS' && <Testimonials />}
+			{toLoad === 'CLIENTS' && <Testimonials data={clients}/>}
 			{toLoad === 'PRESS' && <Press />}
 		</div>
 	)};

@@ -77,19 +77,19 @@ console.log(content);
 
 			for (const item of content) {
 					if (item.action === 'delete') {
-						if (item.section_id === 'p&s: illustratins' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design'){
-						const deleteQuery = 'DELETE FROM media_info_cards WHERE connection_id = $1'
-						const deleteValues = [item.connection_id];
-						await client.query(deleteQuery, deleteValues);
-						}
 
+						let table = '';
+						if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design'){
+							table = 'media_info_cards';	
+						}
 						else if (item.section_id ===  'clients'){
-							const deleteQuery = 'DELETE FROM client_quotes WHERE connection_id = $1';
+							table = 'client_quotes';
+						} 
+							const deleteQuery = `DELETE FROM ${table} WHERE connection_id = $1`;
 							const deleteValue = [item.connection_id];
 							await client.query(deleteQuery, deleteValue);
+							continue;
 						}
-
-					}
 
 				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design') {
 					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
@@ -106,8 +106,8 @@ console.log(content);
 					const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id];
 					await client.query(insertQuery, values);
 				} else if (item.section_id === 'clients') {
-				const insertQuery = 'INSERT INTO client_quotes (connection_id, section_id, link, description, subtitle) VALUES ($1, $2, $3, $4) ON CONFLICT (connection_id) DO UPDATE SET section_id = EXCLUDED.section_id, link = EXCLUDED.link, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle';
-					const values = [item.connection_id, item.link, item.description, item.subtitle];
+				const insertQuery = 'INSERT INTO client_quotes (connection_id, section_id, link, description, subtitle) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (connection_id) DO UPDATE SET section_id = EXCLUDED.section_id, link = EXCLUDED.link, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle';
+					const values = [item.connection_id, item.section_id, item.link, item.description, item.subtitle];
 					await client.query(insertQuery, values);
 					}
 			}
@@ -127,12 +127,13 @@ async function getContent() {
 			const illustrationsResult = await pool.query('SELECT connection_id, src, alt, link, section_id  FROM illustrations ORDER BY connection_id');
 			 const mediaInfoCardsResult = await pool.query('SELECT connection_id, src, alt, link, section_id, title, description, subtitle, published_date FROM media_info_cards ORDER BY published_date' );
 
-			const clientQuotes = await pool.query('SELECT connection_id, section_id, link, title, description, subtitle');
+			const clientQuotes = await pool.query('SELECT connection_id, section_id, link, description, subtitle FROM client_quotes ORDER BY quote_id');
+			console.log('Client quotes: ', clientQuotes.rows);
 
 			const combinedResult = [...illustrationsResult.rows, ...mediaInfoCardsResult.rows, ...clientQuotes.rows];
 			return combinedResult;
 		} catch(err) {
-			console.error('Error getting illustrations', err.stack);
+			console.error('Error getting content', err.stack);
 			throw err;
 		}
 

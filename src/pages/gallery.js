@@ -41,6 +41,8 @@ export async function getStaticProps() {
   const res = await fetch(`${baseUrl}/get-content`)
 	const content = await res.json();
 
+	console.log(content);
+
 	const illustrations = content.filter(item => item.section_id === 'illustrations');
 	const psIllustrations = content.filter(item => item.section_id === 'p&s: illustrations'); 
 	const ps2dAnimation = content.filter(item => item.section_id === 'p&s: 2d animation & motion graphics');
