@@ -12,6 +12,7 @@ const Gallery = ({ illustrations,
 					ps2dAnimation,
 					psCharacterDesign, 
 					clientQuotes,
+					posters,
 					press
 					}) => {
 
@@ -32,25 +33,28 @@ const Gallery = ({ illustrations,
 		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 		<h1>gallery</h1>
 		<SubMenu options={firstMenuOptions} onChangeOption={handleOptionChange} direction="horizontal" selected={currentOption} id="GSM"/>
-		<ContentLoader toLoad={currentOption} options={secondMenuOptions} illustrations={illustrations} mic1={psIllustrations} mic2={ps2dAnimation} mic3={psCharacterDesign} clients={clientQuotes} mic4={press}/>
+<ContentLoader toLoad={currentOption} options={secondMenuOptions} illustrations={illustrations} mic1={psIllustrations} mic2={ps2dAnimation} mic3={psCharacterDesign} clients={clientQuotes} mic4={press} posters={posters}/>
 		</div>
 		</div>
 	)
 };
 
 export async function getStaticProps() {
+
   const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
   const res = await fetch(`${baseUrl}/get-content`)
 	const content = await res.json();
 
-	console.log(content);
 
 	const illustrations = content.filter(item => item.section_id === 'illustrations');
 	const psIllustrations = content.filter(item => item.section_id === 'p&s: illustrations'); 
 	const ps2dAnimation = content.filter(item => item.section_id === 'p&s: 2d animation & motion graphics');
 	const psCharacterDesign = content.filter(item => item.section_id === 'p&s: character design');
+	const posters = content.filter(item => item.section_id === 'p&s: posters');
 	const press = content.filter(item => item.section_id === 'press');
 	const clientQuotes = content.filter(item => item.section_id === 'clients');
+
+	console.log('Poster data', posters);
 
   return {
     props: {
@@ -59,7 +63,8 @@ export async function getStaticProps() {
 		ps2dAnimation,
 		psCharacterDesign,
 		clientQuotes,
-		press
+		press,
+		posters
 	}, // Will be passed to the page component as props
   };
 }

@@ -84,6 +84,8 @@ console.log(content);
 						}
 						else if (item.section_id ===  'clients'){
 							table = 'client_quotes';
+						} else if (item.section_id === 'p&s: posters'){
+							table = 'illustrations';
 						} 
 							const deleteQuery = `DELETE FROM ${table} WHERE connection_id = $1`;
 							const deleteValue = [item.connection_id];
@@ -99,7 +101,7 @@ console.log(content);
 					const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id, item.title, item.description, item.subtitle, item.published_date];
 					await client.query(mediaInfoCardInsert, values);
 
-				} else if (item.section_id === 'illustrations') {
+				} else if (item.section_id === 'illustrations' || item.section_id === 'p&s: posters') {
 						//Find image_id
 					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
 					const imageId = imageRes.rows[0]?.image_id;
@@ -125,13 +127,13 @@ console.log(content);
 
 async function getContent() {
 		try{
-			const illustrationsResult = await pool.query('SELECT connection_id, src, alt, link, section_id  FROM illustrations ORDER BY connection_id');
+			const illustrationsResult = await pool.query(`SELECT connection_id, src, alt, link, section_id  FROM illustrations WHERE section_id = 'illustrations' ORDER BY connection_id`);
+			const postersResult = await pool.query(`SELECT connection_id, src, alt, link, section_id FROM illustrations WHERE section_id = 'p&s: posters' ORDER BY published_date`);
 			 const mediaInfoCardsResult = await pool.query('SELECT connection_id, src, alt, link, section_id, title, description, subtitle, published_date FROM media_info_cards ORDER BY published_date' );
 
 			const clientQuotes = await pool.query('SELECT connection_id, section_id, link, description, subtitle FROM client_quotes ORDER BY quote_id');
-			console.log('Client quotes: ', clientQuotes.rows);
 
-			const combinedResult = [...illustrationsResult.rows, ...mediaInfoCardsResult.rows, ...clientQuotes.rows];
+			const combinedResult = [...illustrationsResult.rows, ...mediaInfoCardsResult.rows, ...clientQuotes.rows, ...postersResult.rows];
 			return combinedResult;
 		} catch(err) {
 			console.error('Error getting content', err.stack);
@@ -147,6 +149,6 @@ module.exports = {
 	getOriginalName, 
 	deleteImageDB,
 	updateContent,
-	getContent
+	getContent,
 };
 

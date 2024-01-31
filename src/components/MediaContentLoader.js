@@ -4,7 +4,6 @@ import MediaInfoCard from './MediaInfoCard';
 
 const MediaContentLoader = ({rows, columns, type, data}) => {
 
-	console.log('Media Info Cards: ',data)
 
 	const grid = [];
 	for (let r = 0; r < rows; r++){
