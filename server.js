@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+	
 let express =  require('express');
 const next = require('next');
 const pool = require('./db');
@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -191,6 +191,27 @@ server.get('/get-content', async (req, res) => {
     }
 });
 
+server.post('/save-blog-post', async (req, res) => {
+	try {
+		const blogPost = req.body.post;
+		const result = await updatePost(blogPost);
+		res.status(200).json({ message: 'Content updated successfully', result });
+	} catch (error){
+		console.error(error.message);
+		res.status(500).send( { error: error.message } )
+	}
+});
+
+server.post('/publish-post', async (req, res) => {
+	try {
+		const postId = req.body.postId;
+		const result = await publishPost(postId);
+		res.status(200).json({ message: 'Post published successfully', result });
+	} catch (error){
+		console.error(error.message);
+		res.status(500).send({ error: error.message })
+	}
+});
 
 server.get('/image-list', async (req, res) => {
 	const page = parseInt(req.query.page) || 1;

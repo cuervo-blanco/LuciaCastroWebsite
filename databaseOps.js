@@ -97,6 +97,7 @@ console.log(content);
 				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design' || item.section_id === 'press') {
 					const imageRes = await client.query('SELECT image_id FROM images WHERE url = $1', [item.src]);
 					const imageId = imageRes.rows[0]?.image_id;
+
 					const mediaInfoCardInsert = `INSERT INTO media_info_cards (connection_id, src, alt, link, image_id, section_id, title, description, subtitle, published_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (connection_id) DO UPDATE SET src = EXCLUDED.src, alt = EXCLUDED.alt, link = EXCLUDED.link, image_id = EXCLUDED.image_id, section_id = EXCLUDED.section_id, title = EXCLUDED.title, description = EXCLUDED.description, subtitle = EXCLUDED.subtitle, published_date = EXCLUDED.published_date`;
 					const values = [item.connection_id, item.src, item.alt, item.link, imageId, item.section_id, item.title, item.description, item.subtitle, item.published_date];
 					await client.query(mediaInfoCardInsert, values);
@@ -142,6 +143,47 @@ async function getContent() {
 
 }
 
+async function updatePost(post) {
+	//receiving a draft or edit (object), checking if its existent on the database already and updating or uploading into the draft_version column based on the post_id
+
+	try {
+		const postExistsResult = await pool.query(`SELECT EXISTS(SELECT 1 FROM posts where post_id = $1) AS exists`, [post.post_id]);
+		const postExists = postExistsResult.rows[0].exists;		
+		
+		const values = [post.post_id,  post.draft_version,  post.author, post.status, post.seo_metadata];
+
+			if (!postExists) {
+				const query ='INSERT INTO posts(post_id, draft_version, author, status, seo_metadata) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+				const result = await pool.query(query, values);
+				return result;
+			} else {
+				const query = 'INSERT INTO posts(post_id, draft_version, author,  status, seo_metadata) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (post_id) DO UPDATE SET  draft_version = EXCLUDED.draft_version, author = EXCLUDED.author, status = EXCLUDED.status, seo_metadata = EXCLUDED.seo_metadata';
+				const result = await pool.query(query, values);
+				return result;
+			}
+	} catch (err) {
+		console.error('Error saving post', err.stack);	
+		throw err;
+	}
+
+}
+
+async function publishPost (postId) {
+	try {
+		//copy the post from the draft_version to the published_version	
+		const draftVersion = await database.query('SELECT draft_version FROM posts WHERE post_id = $1', [postId]);	
+
+		await database.query('UPDATE posts SET published_version = $1, status = $2 WHERE post_id = $3', [draftVersion, 'published', postId]);
+
+		return 'Post updated successfully';
+
+	} catch (error) {
+		console.error('Error publishing post', error)
+		throw error;
+	}
+}
+
+
 
 module.exports = {
     saveImageDB,
@@ -150,5 +192,7 @@ module.exports = {
 	deleteImageDB,
 	updateContent,
 	getContent,
+	updatePost,
+	publishPost
 };
 
