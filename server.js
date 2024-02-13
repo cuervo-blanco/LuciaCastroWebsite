@@ -1,5 +1,5 @@
 require('dotenv').config();
-	
+
 let express =  require('express');
 const next = require('next');
 const pool = require('./db');
@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost, getPost, getPostList } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -52,10 +52,10 @@ const io = new Server(httpServer, {
 
 
 const upload = multer({ dest: 'uploads/' })
-	
+
 	server.use(cors());
 	server.use(express.json());
-	
+
 	pool.connect((err, client, release) => {
     if (err) {
       throw new Error(`Database connection error: ${err.stack}`);
@@ -70,7 +70,7 @@ server.get('/api/gallery', (req, res) => {
 
 server.get('/api/bio', (req, res) => {
 	/* fetch and send html text & images */
-		res.send({ send: true })					
+		res.send({ send: true })
 });
 
 server.get('/api/blog', (req, res) => {
@@ -103,7 +103,7 @@ server.post('/upload', upload.single('file'), async (req, res) => {
     }
 
     const tempFilePath = path.join(__dirname, 'uploads', file.filename);
-    
+
     try {
         const uploadedFile = await bucket.upload(tempFilePath, {
             destination: `uploads/${file.originalname}`
@@ -135,7 +135,7 @@ server.post('/upload', upload.single('file'), async (req, res) => {
                 console.error(`Error deleting temp file: ${err.message}`);
             }
         });
-        
+
         // Send an error response
         res.status(500).send({ error: error.message });
     }
@@ -144,7 +144,7 @@ server.post('/upload', upload.single('file'), async (req, res) => {
 server.post('/delete-image', async (req, res) => {
 
 		const imgUrl = req.body.imgUrl;
-		
+
 		if (!imgUrl) {
 			return res.status(400).send('No image URL provided.');
 		}
@@ -158,8 +158,8 @@ server.post('/delete-image', async (req, res) => {
 		const file = bucket.file(`uploads/${originalName}`); // The path to your file in Firebase Storage
 		await file.delete();
 		//delete from database
-		const dbResult = await deleteImageDB(imgUrl); 
-		
+		const dbResult = await deleteImageDB(imgUrl);
+
 		io.emit('image-deleted', { message: 'Image was deleted'});
 
 		res.send({ message: 'Image deleted successfully', dbResult });
@@ -182,14 +182,24 @@ server.post('/update-content', async (req, res) => {
 });
 
 server.get('/get-content', async (req, res) => {
-	
+
  try {
       const content = await getContent();
       res.json(content);
-    } catch (error) { 
+    } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+server.get('/get-post/:postId', async (req, res) => {
+        try {
+            const postId = req.params.postId;
+            const content = await getPost(postId);
+            res.json(content);
+            } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            }
+        })
 
 server.post('/save-blog-post', async (req, res) => {
 	try {
@@ -223,6 +233,18 @@ server.get('/image-list', async (req, res) => {
 	res.status(500).send(err.message);
 	}
 });
+
+server.get('/get-post-list', async (req, res ) => {
+            try {
+                const result = await getPostList();
+                console.log(result);
+                res.json(result);
+
+            } catch (error) {
+                console.error('Error fetching post list:', error);
+                res.status(500).json({ error: 'Internal Server Error'});
+            }
+        });
 
 // Next.js page handling
   server.get('*', (req, res) => {

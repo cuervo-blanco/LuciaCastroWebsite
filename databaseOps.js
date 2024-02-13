@@ -14,7 +14,7 @@ const saveImageDB = async (publicUrl, altText, originalName) => {
 
 async function getImageList(page, limit) {
   // Database query to get pages
-	
+
 	const offset = (page - 1) * limit;
 
 	try {
@@ -39,10 +39,10 @@ async function getOriginalName(imgUrl) {
             return result.rows[0].original_name; // Return the original_name of the first row
         } else {
             throw new Error('No matching image found for the provided URL.');
-        }	
-	} 
+        }
+	}
 
-	catch (err) { 
+	catch (err) {
 		console.error('Error getting image original name from database', err.stack);
 		throw err;
 	}
@@ -58,7 +58,7 @@ async function deleteImageDB(imgUrl) {
             // Rows were deleted
             return { success: true, message: `${result.rowCount} image(s) deleted successfully.` };
         }
-	} catch { 
+	} catch {
 		console.error('Error deleting image from database', err.stack);
 		throw err;
 	}
@@ -80,13 +80,13 @@ console.log(content);
 
 						let table = '';
 				if (item.section_id === 'p&s: illustrations' || item.section_id === 'p&s: 2d animation & motion graphics' || item.section_id === 'p&s: character design' || item.section_id === 'press'){
-							table = 'media_info_cards';	
+							table = 'media_info_cards';
 						}
 						else if (item.section_id ===  'clients'){
 							table = 'client_quotes';
 						} else if (item.section_id === 'p&s: posters'){
 							table = 'illustrations';
-						} 
+						}
 							const deleteQuery = `DELETE FROM ${table} WHERE connection_id = $1`;
 							const deleteValue = [item.connection_id];
 							await client.query(deleteQuery, deleteValue);
@@ -148,51 +148,79 @@ async function updatePost(post) {
 
 	try {
 		const postExistsResult = await pool.query(`SELECT EXISTS(SELECT 1 FROM posts where post_id = $1) AS exists`, [post.post_id]);
-		const postExists = postExistsResult.rows[0].exists;		
-		
+		const postExists = postExistsResult.rows[0].exists;
+
 		const values = [post.post_id,  post.draft_version,  post.author, post.status, post.seo_metadata];
 
 			if (!postExists) {
-				const query ='INSERT INTO posts(post_id, draft_version, author, status, seo_metadata) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+				const query ='INSERT INTO posts(post_id, draft_version, author, status, seo_metadata) VALUES ($1, $2, $3, $4, $5)';
 				const result = await pool.query(query, values);
 				return result;
 			} else {
-				const query = 'INSERT INTO posts(post_id, draft_version, author,  status, seo_metadata) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (post_id) DO UPDATE SET  draft_version = EXCLUDED.draft_version, author = EXCLUDED.author, status = EXCLUDED.status, seo_metadata = EXCLUDED.seo_metadata';
+				const query = 'INSERT INTO posts(post_id, draft_version, author, status, seo_metadata) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (post_id) DO UPDATE SET  draft_version = EXCLUDED.draft_version, author = EXCLUDED.author, status = EXCLUDED.status, seo_metadata = EXCLUDED.seo_metadata';
 				const result = await pool.query(query, values);
 				return result;
 			}
 	} catch (err) {
-		console.error('Error saving post', err.stack);	
+		console.error('Error saving post', err.stack);
 		throw err;
 	}
 
 }
 
+
 async function publishPost (postId) {
 	try {
-		//copy the post from the draft_version to the published_version	
-		const draftVersion = await database.query('SELECT draft_version FROM posts WHERE post_id = $1', [postId]);	
+        // Query to check if published_date is already set
+        const {rows} = await pool.query('SELECT published_date FROM posts WHERE post_id = $1', [postId]);
+        const post = rows[0];
 
-		await database.query('UPDATE posts SET published_version = $1, status = $2 WHERE post_id = $3', [draftVersion, 'published', postId]);
+        // If published_date is not set, update it along with other rows.
+        if (post && post.published_date === null) {
+            // Copy the draft_version to the published_version and set the published_date to the current date
+            const currentDate = new Date().toISOString().slice(0, 10); // Formats date to 'YYYY-MM-DD HH:MI:SS'
+            await pool.query('UPDATE posts SET published_version = draft_version, status = $1, published_date = $2 WHERE post_id = $3', ['published', currentDate, postId]);
+        } else {
+            // If published_date is already set, just update the published_version and status
+            await pool.query('UPDATE posts SET published_version = draft_version, status = $1 WHERE post_id = $2', ['published', postId]);
+        }
 
-		return 'Post updated successfully';
-
-	} catch (error) {
-		console.error('Error publishing post', error)
-		throw error;
-	}
+        return 'Post updated successfully';
+    } catch (error) {
+        console.error('Error publishing post', error);
+        throw error;
+    }
 }
 
+async function getPost (postId) {
+    try {
+        const post = await pool.query('SELECT post_id, draft_version, author, published_date, status, seo_metadata FROM posts WHERE post_id = $1', [postId]);
+        return post;
+    } catch (error) {
+        console.error('Error getting post', error);
+    }
+}
 
+async function getPostList() {
+    try{
+        const { rows } = await pool.query('SELECT post_id, draft_version, published_version, published_date, status, seo_metadata FROM posts ORDER BY published_date');
+        return rows;
+    } catch(error){
+        console.error('Error getting post', error);
+        throw error;
+    }
+}
 
 module.exports = {
     saveImageDB,
 	getImageList,
-	getOriginalName, 
+	getOriginalName,
 	deleteImageDB,
 	updateContent,
 	getContent,
 	updatePost,
-	publishPost
+	publishPost,
+    getPost,
+    getPostList
 };
 

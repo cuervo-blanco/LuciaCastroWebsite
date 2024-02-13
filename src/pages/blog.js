@@ -7,16 +7,18 @@ import styles from '../styles/Blog.module.scss'
 const Blog = () => {
 
 
+	
 	const { handleTouchStart, handleTouchEnd } = useSwipe({onLeftSwipe: '/shop', onRightSwipe: 'contact/'});
 
-		return (
-			<div id='blog-container'> 
-			<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-				<h1>blog</h1>
-			</div>
-			</div>
-		)
+	return (
+		<div id='blog-container'> 
+		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+		<h1>blog</h1>
+		</div>
+		</div>
+	)
 }
+
 
 export async function getStaticProps() {
   // Fetch blog posts at build time
