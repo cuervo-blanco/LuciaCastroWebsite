@@ -143,8 +143,22 @@ async function getContent() {
 
 }
 
+async function getPostContent(){
+    try {
+        const posts = await pool.query(`SELECT post_id, published_version, published_date, author FROM posts WHERE status = 'published' ORDER BY published_date`);
+        return posts.rows;
+
+
+    } catch (err) {
+        console.error('Error getting post content', err.stack);
+        throw err;
+    }
+}
+
 async function updatePost(post) {
 	//receiving a draft or edit (object), checking if its existent on the database already and updating or uploading into the draft_version column based on the post_id
+
+    console.log(post);
 
 	try {
 		const postExistsResult = await pool.query(`SELECT EXISTS(SELECT 1 FROM posts where post_id = $1) AS exists`, [post.post_id]);
@@ -211,6 +225,17 @@ async function getPostList() {
     }
 }
 
+async function deletePost (postId) {
+    try {
+        const result = await pool.query('DELETE FROM posts WHERE post_id = $1', [postId]);
+        return result;
+
+    } catch (error) {
+        console.error('Error deleting post from the database', error);
+        throw error;
+    }
+}
+
 module.exports = {
     saveImageDB,
 	getImageList,
@@ -221,6 +246,9 @@ module.exports = {
 	updatePost,
 	publishPost,
     getPost,
-    getPostList
+    getPostList,
+    deletePost,
+    getPostContent
 };
+
 

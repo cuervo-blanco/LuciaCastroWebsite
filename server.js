@@ -8,7 +8,7 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost, getPost, getPostList } = require('./databaseOps');
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost, getPost, getPostList, deletePost, getPostContent } = require('./databaseOps');
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -191,9 +191,20 @@ server.get('/get-content', async (req, res) => {
     }
 });
 
+server.get('/get-post-content', async (req, res) => {
+    try {
+            const postContent = await getPostContent();
+            console.log('Post content: ', postContent);
+            res.json(postContent);
+        } catch (error) {
+            res.status(500).json( { error: 'Internal Server Error' } )
+        }
+    })
+
 server.get('/get-post/:postId', async (req, res) => {
         try {
             const postId = req.params.postId;
+            console.log('received a request with this id:', postId);
             const content = await getPost(postId);
             res.json(content);
             } catch (error) {
@@ -211,6 +222,16 @@ server.post('/save-blog-post', async (req, res) => {
 		res.status(500).send( { error: error.message } )
 	}
 });
+
+server.delete('/delete-blog-post', async (req, res) => {
+        try{
+            const postId = req.body.postId;
+            const result = await deletePost(postId);
+            res.json(result);
+            } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            }
+        })
 
 server.post('/publish-post', async (req, res) => {
 	try {
@@ -237,7 +258,6 @@ server.get('/image-list', async (req, res) => {
 server.get('/get-post-list', async (req, res ) => {
             try {
                 const result = await getPostList();
-                console.log(result);
                 res.json(result);
 
             } catch (error) {
