@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useSwipe from '../components/useSwipe';
 import styles from '../styles/Blog.module.scss';
 import BlogPostPreview from '../components/BlogPostPreview';
 
 
-const Blog = ( { posts } ) => {
+const Blog = ( { posts, totalPosts, totalPages } ) => {
 
 
     let rows = 4;
@@ -42,11 +42,14 @@ const Blog = ( { posts } ) => {
 
 	return (
 		<div id={styles.blogContainer}>
-		<div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+		<div onTouchStart={handleTouchStart}
+             onTouchEnd={handleTouchEnd}
+             style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 		<h1>blog</h1>
         <>
             {grid}
         </>
+                { totalPages > 1 && <button> Next</button> }
 		</div>
 		</div>
 	)
@@ -56,12 +59,15 @@ const Blog = ( { posts } ) => {
 export async function getStaticProps() {
   // Fetch blog posts at build time
   const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
-  const res = await fetch(`${baseUrl}/get-post-content`);
-  const posts = await res.json();
-    console.log('Posts as they arrive: ', posts);
+  const res = await fetch(`${baseUrl}/blog/page/1`);
+  const postInfo = await res.json();
+
+  const posts = postInfo.posts;
+  const totalPosts = postInfo.totalPosts;
+  const totalPages = postInfo.totalPages;
 
   return {
-    props: { posts }, // Will be passed to the page component as props
+    props: { posts, totalPosts, totalPages }, // Will be passed to the page component as props
     revalidate: 10 // ISR: Regenerate the page every 10 seconds if needed
   };
 }

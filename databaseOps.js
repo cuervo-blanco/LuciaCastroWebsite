@@ -143,12 +143,30 @@ async function getContent() {
 
 }
 
-async function getPostContent(){
+async function getPostContent(page){
+    page = parseInt(page, 10);
+    let postsPerPage = page === 1 ? 5 : 8;
+
+    const offset = (page - 1) * postsPerPage;
+
     try {
-        const posts = await pool.query(`SELECT post_id, published_version, published_date, author FROM posts WHERE status = 'published' ORDER BY published_date`);
-        return posts.rows;
+        const postsQuery = `
+                SELECT post_id, published_version, published_date, author
+                FROM posts
+                WHERE status = 'published'
+                ORDER BY published_date DESC
+                LIMIT $1 OFFSET $2`;
+        const posts = await pool.query(postsQuery, [postsPerPage, offset]);
 
+        const countQuery =  `SELECT COUNT(*) FROM posts WHERE status = 'published'`;
+        const totalPostsResult = await pool.query(countQuery);
+        const totalPosts = parseInt(totalPostsResult.rows[0].count, 10);
 
+        return {
+            posts: posts.rows,
+            totalPosts,
+            totalPages: Math.ceil(totalPosts / postsPerPage)
+        };
     } catch (err) {
         console.error('Error getting post content', err.stack);
         throw err;
