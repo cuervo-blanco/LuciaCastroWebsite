@@ -191,7 +191,7 @@ server.get('/get-content', async (req, res) => {
     }
 });
 
-server.get('/blog/page/:page', async (req, res) => {
+server.get('/api/blog/page/:page', async (req, res) => {
     try {
             const page = req.params.page;
             const postContent = await getPostContent(page);

@@ -1,10 +1,13 @@
-import { fetchPostsForPage } from '../path/to/your/fetching/logic';
+import React from 'react';
 import Link from 'next/link';
+import styles from '../../../styles/BlogPage.module.scss';
+import { fetchPostsForPage } from '../../../utils/fetchUtils';
+import BlogPostPreview from '../../../components/BlogPostPreview';
 
 // Page component for dynamic route
-export default function BlogPage({ posts, page }) {
+export default function BlogPage({ posts, page, totalPages, totalPosts }) {
 
-    let rows = 4;
+    let rows = 2;
     let columns = 4;
 
 	const grid = [];
@@ -36,14 +39,12 @@ export default function BlogPage({ posts, page }) {
 	}
 
   return (
-    <div>
-      {/* Render blog posts */}
-      {posts.map(post => (
-        <div key={post.id}>{/* Post content */}</div>
-      ))}
+   <div id={styles.blogPageContainer}>
+        {grid}
       {/* Pagination links */}
-      <Link href={`/blog/page/${parseInt(page, 10) - 1}`}><a>Previous</a></Link>
-      <Link href={`/blog/page/${parseInt(page, 10) + 1}`}><a>Next</a></Link>
+      <button>Previous</button>
+
+      { totalPages > page && <button>Next</button> }
     </div>
   );
 }
@@ -51,14 +52,24 @@ export default function BlogPage({ posts, page }) {
 // Fetch posts based on page number
 export async function getStaticProps({ params }) {
   const page = parseInt(params.page, 10);
-  const posts = await fetchPostsForPage(page);
-  return { props: { posts, page } };
-}
+  const postsObject = await fetchPostsForPage(page);
 
-// Define static paths (pre-rendered pages)
+    const posts = postsObject.posts;
+    const totalPosts = postsObject.totalPosts;
+    const totalPages = postsObject.totalPages;
+
+  return { props: { page, posts, totalPosts, totalPages} };
+}
 export async function getStaticPaths() {
-  const totalPages = /* logic to calculate total pages */;
-  const paths = Array.from({ length: totalPages }, (_, i) => ({ params: { page: String(i + 1) } }));
-  return { paths, fallback: 'blocking' };
+    const { totalPages } = await fetchPostsForPage(1);
+
+    const paths = Array.from({ length: totalPages }, (_, index) => ({
+        params: { page: `${index + 1 }`},
+    }));
+
+    return {
+        paths,
+        fallback: false
+    };
 }
 

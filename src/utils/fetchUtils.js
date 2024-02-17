@@ -1,6 +1,6 @@
 export const fetchPostsForPage = async (pageNumber) => {
     try {
-        const response = await fetch(`http://localhost:3002/blog/page/${pageNumber}`, {
+        const response = await fetch(`http://localhost:3002/api/blog/page/${pageNumber}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

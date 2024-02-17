@@ -147,7 +147,7 @@ async function getPostContent(page){
     page = parseInt(page, 10);
     let postsPerPage = page === 1 ? 5 : 8;
 
-    const offset = (page - 1) * postsPerPage;
+    let offset = page === 1 ? (page - 1) * postsPerPage : (page - 1) * postsPerPage - 3;
 
     try {
         const postsQuery = `
