@@ -226,10 +226,22 @@ async function publishPost (postId) {
 
 async function getPost (postId) {
     try {
-        const post = await pool.query('SELECT post_id, draft_version, author, published_date, status, seo_metadata FROM posts WHERE post_id = $1', [postId]);
-        return post;
+        const post = await pool.query('SELECT post_id, draft_version, published_version, author, published_date, status, seo_metadata FROM posts WHERE post_id = $1', [postId]);
+        return post.rows;
     } catch (error) {
         console.error('Error getting post', error);
+    }
+}
+
+async function getBlogPostsIds () {
+    try {
+        const result = await pool.query('SELECT post_id FROM posts');
+        console.log(result.rows);
+        return result.rows;
+
+    } catch (error){
+        console.error('Error getting blog posts ids', error);
+        throw error;
     }
 }
 
@@ -266,7 +278,8 @@ module.exports = {
     getPost,
     getPostList,
     deletePost,
-    getPostContent
+    getPostContent,
+    getBlogPostsIds
 };
 
 

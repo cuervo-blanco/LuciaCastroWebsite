@@ -1,11 +1,29 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styles from '../../../styles/BlogPage.module.scss';
 import { fetchPostsForPage } from '../../../utils/fetchUtils';
 import BlogPostPreview from '../../../components/BlogPostPreview';
 
 // Page component for dynamic route
 export default function BlogPage({ posts, page, totalPages, totalPosts }) {
+
+    const router = useRouter();
+
+    const handlePrevious = (currentPage) => {
+        const previousPage = currentPage - 1;
+
+        if (previousPage !== 1){
+            router.push(`/blog/page/${previousPage}`)
+        } else {
+            router.push(`/blog`);
+        }
+    }
+
+    const handleNext = (currentPage) => {
+        const nextPage = currentPage + 1;
+        router.push(`/blog/page/${nextPage}`)
+    }
 
     let rows = 2;
     let columns = 4;
@@ -23,6 +41,7 @@ export default function BlogPage({ posts, page, totalPages, totalPosts }) {
 				row.push(
                 <BlogPostPreview key={`post-${c}-${r}`}
                                  img={post.published_version.featured_image}
+                                 post_id={post.post_id}
                                  title={post.published_version.title}
                                  description={post.published_version.description}
                                  slug={post.published_version.slug}
@@ -42,9 +61,9 @@ export default function BlogPage({ posts, page, totalPages, totalPosts }) {
    <div id={styles.blogPageContainer}>
         {grid}
       {/* Pagination links */}
-      <button>Previous</button>
+    { page !== 1 &&  <button onClick={() => handlePrevious(page)}>Previous</button>}
 
-      { totalPages > page && <button>Next</button> }
+      { totalPages > page && <button onClick={() => handleNext(page)}>Next</button> }
     </div>
   );
 }

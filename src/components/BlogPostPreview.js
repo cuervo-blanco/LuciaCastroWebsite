@@ -4,7 +4,7 @@ import styles from '../styles/BlogPostPreview.module.scss'
 
 
 export default function BlogPostPreview (
-    { img, title, description, slug, date, author }){
+    { img, post_id, title, description, slug, date, author }){
 
     const [published_date, setPublishedDate] = useState('');
 
@@ -35,13 +35,15 @@ export default function BlogPostPreview (
 
                  <section>
                     <div id={styles.imgFrame}>
+                        <a href={`/blog/${post_id}`}>
                         <img alt={`${title}'s post front image`} src={img} />
+                        </a>
                     </div>
                 </section>
 
                 <section>
                     <div id={styles.textFrame}>
-                        <a href={`/blog/${slug}`}>{title}</a>
+                        <a href={`/blog/${post_id}`}>{title}</a>
                         <p>{description}</p>
                         <p>{published_date}</p>
                         <p>{author}</p>

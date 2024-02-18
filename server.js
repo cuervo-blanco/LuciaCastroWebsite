@@ -8,7 +8,11 @@ const os = require('os');
 const fs = require('fs');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent, getContent, updatePost, publishPost, getPost, getPostList, deletePost, getPostContent } = require('./databaseOps');
+
+const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent,
+        getContent, updatePost, publishPost, getPost, getPostList, deletePost,
+        getPostContent, getBlogPostsIds } = require('./databaseOps');
+
 const { Server } = require('socket.io');
 const http = require('http');
 
@@ -63,36 +67,6 @@ const upload = multer({ dest: 'uploads/' })
     console.log('Database Connected Successfully');
     release();
 
-server.get('/api/gallery', (req, res) => {
-	/* fetch and send gallery images */
-	res.send({ send: true })
-});
-
-server.get('/api/bio', (req, res) => {
-	/* fetch and send html text & images */
-		res.send({ send: true })
-});
-
-server.get('/api/blog', (req, res) => {
-	/* fetch and send blog post previews as object */
-	res.send({ send: true })
-});
-
-server.get('/api/blog/blog-posts-ids', (req, res) => {
-	/* fetch and send an array containing the blog post ids  */
-	res.send({ send: true })
-});
-
-server.get('/api/blog/:postId', (req, res) => {
-	/* fetch and send blog post text, images etc.  */
-	res.send({ send: true })
-});
-
-
-server.get('/api/shop', (req, res) => {
-	/* fetch and send shop items previews */
-	res.send({ send: true })
-});
 
 // Upload file to Firebase Storage
 
@@ -201,6 +175,16 @@ server.get('/api/blog/page/:page', async (req, res) => {
             res.status(500).json( { error: 'Internal Server Error' } )
         }
     })
+
+server.get('/api/blog/blog-posts-ids', async (req, res) => {
+            try {
+                const postIds = await getBlogPostsIds();
+                res.json(postIds);
+            } catch (error) {
+                console.error('Error fetching post IDs:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        })
 
 server.get('/get-post/:postId', async (req, res) => {
         try {

@@ -25,6 +25,7 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
                 row.push(
                     <BlogPostPreview key={`post-${c}-${r}`}
                         img={post.published_version.featured_image}
+                        post_id={post.post_id}
                         title={post.published_version.title}
                         description={post.published_version.description}
                         slug={post.published_version.slug}

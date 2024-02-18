@@ -13,12 +13,12 @@ const Menu = () => {
 
 	return (
 		<div id={styles.menuContainer}>
-			<nav id={styles.navbar}> 
+			<nav id={styles.navbar}>
 				{/* Left and Upper Side*/}
 				<div id={styles.leftSide}>
 					<Link href="/" className={`${styles.menuLink} ${styles.logo}`}>
-						<img src="" alt="logo"/> 
-					</Link>	
+						<img src="" alt="logo"/>
+					</Link>
 				</div>
 				{/* Right and Lower Side*/}
 				<div id={styles.rightSide}>
@@ -30,9 +30,9 @@ const Menu = () => {
 					</Link>
 					<Link className={`${styles.menuLink} ${menuStyle}`} href="/contact" >
 						<span >contact</span>
-					</Link>	
+					</Link>
 					<Link className={`${styles.menuLink} ${menuStyle}`} href="/blog"  >
-						<span >blog</span>			
+						<span >blog</span>
 					</Link>
 					<Link className={`${styles.menuLink} ${menuStyle}`} href="/shop" >
 						<span >shop</span>
