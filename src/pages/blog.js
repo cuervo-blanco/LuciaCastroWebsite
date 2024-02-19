@@ -9,8 +9,10 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
 
     const router = useRouter();
 
+    const headerPost = posts[0];
+
     let rows = 2;
-    let columns = 4;
+    let columns = 3;
 
     const grid = [];
 
@@ -22,8 +24,12 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
             const post = posts[index];
 
             if (post) {
+                if (index === 0) {
+                continue;
+                } else {
                 row.push(
                     <BlogPostPreview key={`post-${c}-${r}`}
+                        isFeatured={false}
                         img={post.published_version.featured_image}
                         post_id={post.post_id}
                         title={post.published_version.title}
@@ -32,6 +38,7 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
                         date={post.published_date}
                         author={post.author} />
                 );
+                }
             }
         }
         if (row.length > 0) {
@@ -53,10 +60,21 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
                 onTouchEnd={handleTouchEnd}
                 style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
                 <h1>blog</h1>
-                <>
+                <div id={styles.gridContainer}>
+                    <BlogPostPreview
+                        isFeatured={true}
+                        img={headerPost.published_version.featured_image}
+                        post_id={headerPost.post_id}
+                        title={headerPost.published_version.title}
+                        description={headerPost.published_version.description}
+                        slug={headerPost.published_version.slug}
+                        date={headerPost.published_date}
+                        author={headerPost.author} />
+
                     {grid}
-                </>
-                {totalPages > 1 && <button onClick={handleNext}> Next</button>}
+
+                </div>
+                {totalPages > 1 &&<><button onClick={handleNext}>&gt;</button></>}
             </div>
         </div>
     )

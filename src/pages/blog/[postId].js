@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '../../styles/BlogPost.module.scss';
-import dynamic from 'next/dynamic';
 import DOMPurify from 'isomorphic-dompurify';
 
 const BlogPost = ({ article }) => {
@@ -10,10 +9,15 @@ const BlogPost = ({ article }) => {
 
 		return(
 			<div id={styles.blogPostContainer}>
-                <h1>{article.published_version.title}</h1>
-                <img src={article.published_version.featured_image} style={{ width: '400px'}}/>
-                <div id={styles.blogPostBody} dangerouslySetInnerHTML={{ __html: cleanHtml }}>
-                </div>
+                <h1 id={styles.blogPostTitle}>{article.published_version.title}</h1>
+
+                <p id={styles.blogPostDescription}>{article.published_version.description}</p>
+
+                <img id={styles.blogPostImage} src={article.published_version.featured_image}/>
+
+                <div id={styles.blogPostBody} dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
+
+                <button>Go Back</button>
 			</div>
 		)
 	}
