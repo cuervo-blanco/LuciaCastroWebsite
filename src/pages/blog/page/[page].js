@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styles from '../../../styles/BlogPage.module.scss';
+import styles from '../../../styles/blogPage.module.scss';
 import { fetchPostsForPage } from '../../../utils/fetchUtils';
 import BlogPostPreview from '../../../components/BlogPostPreview';
 
@@ -59,28 +59,47 @@ export default function BlogPage({ posts, page, totalPages, totalPosts }) {
 
   return (
    <div id={styles.blogPageContainer}>
-        {grid}
+        <div id={styles.postPreviewContainer}>
+            {grid}
+        </div>
       {/* Pagination links */}
-    { page !== 1 &&  <button onClick={() => handlePrevious(page)}>Previous</button>}
-
-      { totalPages > page && <button onClick={() => handleNext(page)}>Next</button> }
+    { page !== 1 &&  <button className={styles.prevButton} onClick={() => handlePrevious(page)}>&lt;</button>}
+    { totalPages > page && <button className={styles.loadMoreButton} onClick={() => handleNext(page)}>&gt;</button> }
     </div>
   );
 }
 
 // Fetch posts based on page number
 export async function getStaticProps({ params }) {
-  const page = parseInt(params.page, 10);
-  const postsObject = await fetchPostsForPage(page);
+    try {
+        const page = parseInt(params.page, 10);
+        const res = await fetch(`http://localhost:3002/api/blog/page/${page}`);
+        if(!res.ok){
+            console.error(`Failer to fetch posts, status: ${res.status}`)
+            throw new Error(`Failed to fetch posts, status: ${res.status}`);
+        }
 
-    const posts = postsObject.posts;
-    const totalPosts = postsObject.totalPosts;
-    const totalPages = postsObject.totalPages;
+        const data = await res.json();
+        console.log('Data received for the individual pages: ', data);
 
-  return { props: { page, posts, totalPosts, totalPages} };
+        if(!data.posts){
+            console.error('No posts found');
+            return { props: {  props: [], page, totalPosts: 0, totalPages: 0}};
+        }
+
+      return { props: { ...data, page} };
+} catch (error) {
+        console.error('Error fetching posts:', error);
+        return { props: { posts: [], page: 1, totalPosts: 0, totalPages: 0}};
+    }
 }
+
 export async function getStaticPaths() {
-    const { totalPages } = await fetchPostsForPage(1);
+    const baseUrl = 'http://localhost:3002'
+    const res = await fetch(`${baseUrl}/api/blog/page/1?firstPagePosts=5`);
+    const data = await res.json();
+
+    const { totalPages } = data;
 
     const paths = Array.from({ length: totalPages }, (_, index) => ({
         params: { page: `${index + 1 }`},

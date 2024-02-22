@@ -59,7 +59,7 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
             <div onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-                <h1>blog</h1>
+                <h1>lucia's recent</h1>
                 <div id={styles.gridContainer}>
                     <BlogPostPreview
                         isFeatured={true}
@@ -84,12 +84,11 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
 export async function getStaticProps() {
     // Fetch blog posts at build time
     const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.com' : 'http://localhost:3002';
-    const res = await fetch(`${baseUrl}/api/blog/page/1`);
+    const res = await fetch(`${baseUrl}/api/blog/`);
     const postInfo = await res.json();
 
-    const posts = postInfo.posts;
-    const totalPosts = postInfo.totalPosts;
-    const totalPages = postInfo.totalPages;
+    const { posts, totalPosts, totalPages } = postInfo;
+
 
     return {
         props: { posts, totalPosts, totalPages }, // Will be passed to the page component as props

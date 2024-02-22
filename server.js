@@ -11,7 +11,7 @@ const cors = require('cors');
 
 const { saveImageDB, getImageList, deleteImageDB, getOriginalName, updateContent,
         getContent, updatePost, publishPost, getPost, getPostList, deletePost,
-        getPostContent, getBlogPostsIds } = require('./databaseOps');
+        getPostContent, getBlogPostsIds, getFirstPagePosts } = require('./databaseOps');
 
 const { Server } = require('socket.io');
 const http = require('http');
@@ -165,12 +165,23 @@ server.get('/get-content', async (req, res) => {
     }
 });
 
+server.get('/api/blog', async (req, res) => {
+            try {
+                const postContent = await getFirstPagePosts();
+                res.json(postContent);
+            } catch (error) {
+                res.status(500).json({ error: 'Internal Server Error' })
+            }
+        });
+
 server.get('/api/blog/page/:page', async (req, res) => {
     try {
             const page = req.params.page;
+
             const postContent = await getPostContent(page);
-            console.log('Post content: ', postContent);
+
             res.json(postContent);
+
         } catch (error) {
             res.status(500).json( { error: 'Internal Server Error' } )
         }

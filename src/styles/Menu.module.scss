@@ -9,6 +9,7 @@
 	width: 100%;
 	height: $size-l;
 	font-family: $font-secondary-default;
+    z-index: 2;
 
 	#navbar{
 		display: flex;
@@ -45,7 +46,7 @@
 		}
 
 			.menuLink{
-			color: $secondary-color-default; 
+			color: $secondary-color-default;
 			text-decoration: none;
 			}
 

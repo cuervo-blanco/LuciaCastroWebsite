@@ -1,0 +1,22 @@
+@import 'variables';
+
+#testimonialsContainer{
+    border: 2px solid red;
+
+    .previousButton{
+
+        position: absolute;
+        left: 0;
+    }
+    #quote{
+        blockquote{
+
+        }
+        p{
+
+        }
+    }
+    .nextButton{
+
+    }
+}

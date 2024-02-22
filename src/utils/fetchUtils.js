@@ -1,6 +1,6 @@
 export const fetchPostsForPage = async (pageNumber) => {
     try {
-        const response = await fetch(`http://localhost:3002/api/blog/page/${pageNumber}`, {
+        const response = await fetch(`http://localhost:3002/blog/page/${pageNumber}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -8,7 +8,7 @@ export const fetchPostsForPage = async (pageNumber) => {
         });
 
         if (!response.ok) {
-           throw new Error(`Error deleting blog post to website's server: ${response.status}`);
+           throw new Error(`Error getting blog posts from website's server: ${response.status}`);
         }
 
         const result = await response.json();
@@ -16,8 +16,7 @@ export const fetchPostsForPage = async (pageNumber) => {
         return result;
 
     } catch (error) {
-        console.error('Error deleting the blog post', error);
-
+        console.error('Error getting the blog posts', error);
         throw error;
     }
 }

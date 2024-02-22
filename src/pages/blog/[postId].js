@@ -9,6 +9,7 @@ const BlogPost = ({ article }) => {
 
 		return(
 			<div id={styles.blogPostContainer}>
+                <div id={styles.blogPostMist}></div>
                 <h1 id={styles.blogPostTitle}>{article.published_version.title}</h1>
 
                 <p id={styles.blogPostDescription}>{article.published_version.description}</p>
@@ -17,7 +18,7 @@ const BlogPost = ({ article }) => {
 
                 <div id={styles.blogPostBody} dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
 
-                <button>Go Back</button>
+                <button>&lt;</button>
 			</div>
 		)
 	}

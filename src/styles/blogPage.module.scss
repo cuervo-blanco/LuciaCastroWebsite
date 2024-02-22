@@ -1,0 +1,71 @@
+@import 'variables';
+
+#blogPageContainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: linear-gradient($secondary-color-light, $secondary-color-dark);
+    z-index: 0;
+
+    .prevButton{
+        top: calc(50% + 100px);
+        left: 10%;
+    }
+
+    .loadMoreButton{
+        top: calc(50% + 100px);
+        right: 10px;
+    }
+
+    button {
+        z-index: 50;
+        border: none;
+        color: white;
+        background-color: rgba($secondary-color-dark, 0.6);
+        width: 75px;
+        height: 75px;
+        border-radius: 100%;
+        position: absolute;
+        font-size: 32px;
+        transform: translateX(-50px);
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+
+        &:hover{
+            background-color: $secondary-color-dark;
+            cursor: pointer;
+        }
+    }
+
+    h1{
+        z-index: 10;
+        position: absolute;
+        bottom: 0;
+        height: calc(80vh + 20px);
+
+    }
+
+    #postPreviewContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        width: 80vw;
+        height: 80vh;
+
+        div{
+            display: flex;
+            justify-content: center;
+        }
+
+    }
+}
+

@@ -15,4 +15,43 @@
 	flex-direction: row;
 	}
 
+
+
+   .paginationButtons{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 5%;
+
+        button {
+            z-index: 50;
+            border: none;
+            color: white;
+            background-color: rgba($secondary-color-dark, 0.6);
+            width: 75px;
+            height: 75px;
+            border-radius: 100%;
+            font-size: 32px;
+            transform: translateX(-50px);
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+
+
+            &:hover{
+                background-color: $secondary-color-dark;
+                cursor: pointer;
+            }
+        }
+        .prevButton{
+
+        }
+
+        .loadMoreButton{
+
+        }
+    }
+
+
 }

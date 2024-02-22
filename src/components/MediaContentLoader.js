@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/MediaContentLoader.module.scss';
 import MediaInfoCard from './MediaInfoCard';
 
 const MediaContentLoader = ({rows, columns, type, data}) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = rows * columns;
 
+    const nextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        setCurrentPage(currentPage - 1);
+    }
+
+    const lastItemIndex = currentPage * itemsPerPage;
+    const firstItemIndex = lastItemIndex - itemsPerPage;
+    const currentItems = data.slice(firstItemIndex, lastItemIndex);
 
 	const grid = [];
 	for (let r = 0; r < rows; r++){
@@ -11,7 +24,7 @@ const MediaContentLoader = ({rows, columns, type, data}) => {
 
 		for (let c = 0; c < columns; c++){
 			const index = r * columns + c ;
-			const card = data[index];
+            const card = currentItems[index];
 
 			if (card) {
 				row.push(
@@ -29,6 +42,14 @@ const MediaContentLoader = ({rows, columns, type, data}) => {
 	return (
 		<div id={styles.mediaContentLoaderContainer}>
 			{grid}
+            <div className={styles.paginationButtons}>
+            {currentPage > 1 && (
+                <button onClick={prevPage} className={styles.prevButton}>&lt;</button>
+            )}
+            {lastItemIndex < data.length && (
+                <button onClick={nextPage} className={styles.loadMoreButton}>&gt;</button>
+            )}
+            </div>
 		</div>
 	)};
 

@@ -1,4 +1,5 @@
 const pool = require('./db'); // import your database pool
+const moment = require('moment');
 
 const saveImageDB = async (publicUrl, altText, originalName) => {
     try {
@@ -143,29 +144,68 @@ async function getContent() {
 
 }
 
+async function getFirstPagePosts(){
+    try {
+        const postsQuery = `SELECT post_id, published_version, published_date, author
+        FROM posts
+        WHERE status = 'published'
+        ORDER BY published_date DESC
+        LIMIT 5`;
+
+        const posts = await pool.query(postsQuery);
+        console.log('First Page Posts: ', posts.rows);
+
+        const countQuery = `SELECT COUNT(*) FROM posts WHERE status = 'published'`;
+        const totalPostsResult = await pool.query(countQuery);
+        const totalPosts = parseInt(totalPostsResult.rows[0].count, 10);
+
+        let remainingPosts = totalPosts - 5;
+        let additionalPages = Math.ceil(remainingPosts / 8);
+        let totalPages = additionalPages + 1;
+
+        return {
+            posts: posts.rows,
+            totalPosts: totalPosts,
+            totalPages: totalPages
+        }
+    } catch (error) {
+        console.error('Error fetching posts for Blog Home Page', error);
+        throw error;
+        }
+}
+
 async function getPostContent(page){
     page = parseInt(page, 10);
-    let postsPerPage = page === 1 ? 5 : 8;
+    let offset = ((page - 1) * 8) - 3 ;
 
-    let offset = page === 1 ? (page - 1) * postsPerPage : (page - 1) * postsPerPage - 3;
+    if (page === 1){
+        offset = 0;
+    }
 
     try {
-        const postsQuery = `
-                SELECT post_id, published_version, published_date, author
+        const postsQuery =
+                `SELECT post_id, published_version, published_date, author
                 FROM posts
                 WHERE status = 'published'
                 ORDER BY published_date DESC
-                LIMIT $1 OFFSET $2`;
-        const posts = await pool.query(postsQuery, [postsPerPage, offset]);
+                LIMIT 8 OFFSET $1`;
+
+        const posts = await pool.query(postsQuery, [offset]);
 
         const countQuery =  `SELECT COUNT(*) FROM posts WHERE status = 'published'`;
         const totalPostsResult = await pool.query(countQuery);
         const totalPosts = parseInt(totalPostsResult.rows[0].count, 10);
 
+        let remainingPosts = totalPosts - 5;
+        let additionalPages = Math.ceil(remainingPosts / 8);
+        let totalPages = additionalPages + 1;
+
+        console.log('Posts in the database', posts.rows);
+
         return {
             posts: posts.rows,
-            totalPosts,
-            totalPages: Math.ceil(totalPosts / postsPerPage)
+            totalPosts: totalPosts,
+            totalPages: totalPages
         };
     } catch (err) {
         console.error('Error getting post content', err.stack);
@@ -210,7 +250,8 @@ async function publishPost (postId) {
         // If published_date is not set, update it along with other rows.
         if (post && post.published_date === null) {
             // Copy the draft_version to the published_version and set the published_date to the current date
-            const currentDate = new Date().toISOString().slice(0, 10); // Formats date to 'YYYY-MM-DD HH:MI:SS'
+            const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');// Formats date to 'YYYY-MM-DD HH:MI:SS'
+
             await pool.query('UPDATE posts SET published_version = draft_version, status = $1, published_date = $2 WHERE post_id = $3', ['published', currentDate, postId]);
         } else {
             // If published_date is already set, just update the published_version and status
@@ -279,7 +320,8 @@ module.exports = {
     getPostList,
     deletePost,
     getPostContent,
-    getBlogPostsIds
+    getBlogPostsIds,
+    getFirstPagePosts
 };
 
 

@@ -5,6 +5,7 @@
 	height: 100vh;
 	display: flex;
     overflow: hidden;
+    background: linear-gradient($secondary-color-light, $secondary-color-dark);
 
 
 	h1 {
@@ -32,21 +33,22 @@
         z-index: 50;
         border: none;
         color: white;
-        background-color: rgba($tertiary-color-default, 0.7);
-        width: 100px;
-        height: 100px;
+        background-color: rgba($secondary-color-dark, 0.6);
+        width: 75px;
+        height: 75px;
         border-radius: 100%;
         position: absolute;
         top: calc(50% + 100px);
-        right: 10px;
-        font-size: 200px;
+        right: 0px;
+        font-size: 32px;
+        transform: translateX(-50px);
         display: flex;
         text-align: center;
-        justify-content: end;
+        justify-content: center;
         align-items: center;
 
         &:hover{
-            background-color: $tertiary-color-light;
+            background-color: $secondary-color-dark;
             cursor: pointer;
         }
     }
