@@ -46,7 +46,8 @@ export default function BlogPage({ posts, page, totalPages, totalPosts }) {
                                  description={post.published_version.description}
                                  slug={post.published_version.slug}
                                  date={post.published_date}
-                                 author={post.author}/>
+                                 author={post.author}
+                                 page={page}/>
 				);
 			}
 		}
@@ -96,7 +97,7 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
     const baseUrl = 'http://localhost:3002'
-    const res = await fetch(`${baseUrl}/api/blog/page/1?firstPagePosts=5`);
+    const res = await fetch(`${baseUrl}/api/blog/`);
     const data = await res.json();
 
     const { totalPages } = data;

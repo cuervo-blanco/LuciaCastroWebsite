@@ -1,24 +1,40 @@
 import React from 'react';
 import styles from '../../styles/BlogPost.module.scss';
 import DOMPurify from 'isomorphic-dompurify';
+import { useRouter } from 'next/router';
 
 const BlogPost = ({ article }) => {
 
     const dirtyHtml = article.published_version.body;
     const cleanHtml = DOMPurify.sanitize(dirtyHtml);
 
+    const router = useRouter();
+    const { query } = router;
+
+    const location = query.location;
+
+    const handleGoBack = () => {
+        if (location === 'home') {
+            router.push( `/blog`);
+        } else {
+            router.push(`/blog/page/${location}`);
+        }
+    }
+
 		return(
 			<div id={styles.blogPostContainer}>
                 <div id={styles.blogPostMist}></div>
-                <h1 id={styles.blogPostTitle}>{article.published_version.title}</h1>
+                <div id={styles.blogPostArticleContainer}>
+                    <h1 id={styles.blogPostTitle}>{article.published_version.title}</h1>
 
-                <p id={styles.blogPostDescription}>{article.published_version.description}</p>
+                    <p id={styles.blogPostDescription}>{article.published_version.description}</p>
 
-                <img id={styles.blogPostImage} src={article.published_version.featured_image}/>
+                    <img id={styles.blogPostImage} src={article.published_version.featured_image}/>
 
-                <div id={styles.blogPostBody} dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
+                    <div id={styles.blogPostBody} dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
 
-                <button>&lt;</button>
+                </div>
+                <button onClick={handleGoBack}>&lt;</button>
 			</div>
 		)
 	}
@@ -49,7 +65,7 @@ const baseUrl = process.env.NODE_ENV === 'production' ? 'https://lucia-castro.co
     const article = post[0];
 
   return {
-    props: { article },
+    props: { article},
   };
 }
 

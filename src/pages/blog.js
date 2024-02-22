@@ -36,7 +36,8 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
                         description={post.published_version.description}
                         slug={post.published_version.slug}
                         date={post.published_date}
-                        author={post.author} />
+                        author={post.author}
+                        page={'home'}/>
                 );
                 }
             }
@@ -69,7 +70,8 @@ const Blog = ({ posts, totalPosts, totalPages }) => {
                         description={headerPost.published_version.description}
                         slug={headerPost.published_version.slug}
                         date={headerPost.published_date}
-                        author={headerPost.author} />
+                        author={headerPost.author}
+                        page={'home'}/>
 
                     {grid}
 
